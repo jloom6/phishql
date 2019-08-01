@@ -1,5 +1,7 @@
 package service
 
+//go:generate retool do mockgen -destination=mocks/service.go -package=mocks github.com/jloom6/phishql/service Interface
+
 import (
 	"context"
 	"sort"

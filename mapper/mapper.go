@@ -1,5 +1,7 @@
 package mapper
 
+//go:generate retool do mockgen -destination=mocks/mapper.go -package=mocks github.com/jloom6/phishql/mapper Interface
+
 import (
 	"github.com/golang/protobuf/ptypes"
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"

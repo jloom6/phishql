@@ -1,5 +1,7 @@
 package storage
 
+//go:generate retool do mockgen -destination=mocks/storage.go -package=mocks github.com/jloom6/phishql/storage Interface
+
 import (
 	"context"
 

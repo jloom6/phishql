@@ -2,17 +2,69 @@ package mysql
 
 import (
 	"context"
-	"database/sql"
 
+	"github.com/jloom6/phishql/internal/db"
 	"github.com/jloom6/phishql/structs"
 )
 
+const (
+	getShowsQuery = `
+SELECT
+	shows.id show_id,
+	shows.date show_date,
+	artists.id artist_id,
+    artists.name artist_name,
+    venues.id venue_id,
+    venues.name venue_name,
+    venues.city venue_city,
+    venues.state venue_state,
+    COALESCE(tours.id, 0) tour_id,
+    COALESCE(tours.name, '') tour_name,
+    COALESCE(tours.desc, '') tour_description,
+    COALESCE(shows.notes, '') show_notes,
+    COALESCE(shows.soundcheck, '') show_soundcheck
+FROM
+	shows
+		INNER JOIN artists ON shows.artist_id = artists.id
+		INNER JOIN venues ON shows.venue_id = venues.id
+		LEFT JOIN tours ON shows.tour_id = tours.id
+`
+	getSetsQuery = `
+SELECT
+	sets.show_id show_id,
+    sets.order set_order,
+	sets.id set_id,
+    sets.label set_label
+FROM
+	sets
+`
+	getSongsQuery = `
+SELECT
+	sets.show_id show_id,
+    sets.order set_order,
+    songs.id song_id,
+    songs.name song_name,
+    COALESCE(tags.id, 0) tag_id,
+    COALESCE(tags.text, '') tag_text,
+    COALESCE(set_songs.transition, '') song_transition
+FROM
+	set_songs
+	    INNER JOIN sets ON set_songs.set_id = sets.id
+		INNER JOIN songs ON set_songs.song_id = songs.id
+		LEFT JOIN tags ON set_songs.tag_id = tags.id
+ORDER BY
+	sets.show_id,
+    sets.order,
+    set_songs.order
+`
+)
+
 type Store struct {
-	db *sql.DB
+	db db.Interface
 }
 
 type Params struct {
-	DB *sql.DB
+	DB db.Interface
 }
 
 func New(p Params) *Store {
@@ -39,27 +91,7 @@ func (s *Store) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]st
 }
 
 func (s *Store) getShows(ctx context.Context, _ structs.GetShowsRequest) (map[int]structs.Show, error) {
-	rows, err := s.db.QueryContext(ctx, `
-SELECT
-	shows.id show_id,
-	shows.date show_date,
-	artists.id artist_id,
-    artists.name artist_name,
-    venues.id venue_id,
-    venues.name venue_name,
-    venues.city venue_city,
-    venues.state venue_state,
-    COALESCE(tours.id, 0) tour_id,
-    COALESCE(tours.name, '') tour_name,
-    COALESCE(tours.desc, '') tour_description,
-    COALESCE(shows.notes, '') show_notes,
-    COALESCE(shows.soundcheck, '') show_soundcheck
-FROM
-	shows
-		INNER JOIN artists ON shows.artist_id = artists.id
-		INNER JOIN venues ON shows.venue_id = venues.id
-		LEFT JOIN tours ON shows.tour_id = tours.id
-`)
+	rows, err := s.db.QueryContext(ctx, getShowsQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -69,11 +101,11 @@ FROM
 	return makeShows(rows)
 }
 
-func closeRows(rows *sql.Rows) {
+func closeRows(rows db.Rows) {
 	_ = rows.Close()
 }
 
-func makeShows(rows *sql.Rows) (map[int]structs.Show, error) {
+func makeShows(rows db.Rows) (map[int]structs.Show, error) {
 	shows := make(map[int]structs.Show, 0)
 
 	for rows.Next() {
@@ -88,7 +120,7 @@ func makeShows(rows *sql.Rows) (map[int]structs.Show, error) {
 	return shows, nil
 }
 
-func makeShow(row *sql.Rows) (structs.Show, error) {
+func makeShow(row db.Rows) (structs.Show, error) {
 	var show structs.Show
 	var tour structs.Tour
 
@@ -107,15 +139,7 @@ func makeShow(row *sql.Rows) (structs.Show, error) {
 }
 
 func (s *Store) getSets(ctx context.Context, _ structs.GetShowsRequest) (map[int]map[int]structs.Set, error) {
-	rows, err := s.db.QueryContext(ctx, `
-SELECT
-	sets.show_id show_id,
-    sets.order set_order,
-	sets.id set_id,
-    sets.label set_label
-FROM
-	sets
-`)
+	rows, err := s.db.QueryContext(ctx, getSetsQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +149,7 @@ FROM
 	return makeSets(rows)
 }
 
-func makeSets(rows *sql.Rows) (map[int]map[int]structs.Set, error) {
+func makeSets(rows db.Rows) (map[int]map[int]structs.Set, error) {
 	sets := map[int]map[int]structs.Set{}
 
 	for rows.Next() {
@@ -147,25 +171,7 @@ func makeSets(rows *sql.Rows) (map[int]map[int]structs.Set, error) {
 }
 
 func (s *Store) getSongs(ctx context.Context, _ structs.GetShowsRequest) (map[int]map[int][]structs.SetSong, error) {
-	rows, err := s.db.QueryContext(ctx, `
-SELECT
-	sets.show_id show_id,
-    sets.order set_order,
-    songs.id song_id,
-    songs.name song_name,
-    COALESCE(tags.id, 0) tag_id,
-    COALESCE(tags.text, '') tag_text,
-    COALESCE(set_songs.transition, '') song_transition
-FROM
-	set_songs
-	    INNER JOIN sets ON set_songs.set_id = sets.id
-		INNER JOIN songs ON set_songs.song_id = songs.id
-		LEFT JOIN tags ON set_songs.tag_id = tags.id
-ORDER BY
-	sets.show_id,
-    sets.order,
-    set_songs.order
-`)
+	rows, err := s.db.QueryContext(ctx, getSongsQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -175,7 +181,7 @@ ORDER BY
 	return makeSongs(rows)
 }
 
-func makeSongs(rows *sql.Rows) (map[int]map[int][]structs.SetSong, error) {
+func makeSongs(rows db.Rows) (map[int]map[int][]structs.SetSong, error) {
 	songs := map[int]map[int][]structs.SetSong{}
 
 	for rows.Next() {

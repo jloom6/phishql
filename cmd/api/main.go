@@ -8,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"
 	"github.com/jloom6/phishql/handler"
+	"github.com/jloom6/phishql/internal/db"
 	"github.com/jloom6/phishql/mapper"
 	"github.com/jloom6/phishql/service"
 	"github.com/jloom6/phishql/storage/mysql"
@@ -21,18 +22,18 @@ const (
 )
 
 func main() {
-	db, err := sql.Open(dbDriver, dbConnectionString)
+	sqlDB, err := sql.Open(dbDriver, dbConnectionString)
 	if err != nil {
 		log.Fatalf("failed to open db: %v", err)
 	}
 
 	defer func() {
-		if err := db.Close(); err != nil {
+		if err := sqlDB.Close(); err != nil {
 			log.Fatalf("failed to close db: %v", err)
 		}
 	}()
 
-	store := mysql.New(mysql.Params{DB: db})
+	store := mysql.New(mysql.Params{DB: db.New(sqlDB)})
 	svc := service.New(service.Params{Store: store})
 	h := handler.New(handler.Params{
 		Service: svc,
