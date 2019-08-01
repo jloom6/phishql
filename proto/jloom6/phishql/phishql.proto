@@ -1,0 +1,72 @@
+syntax = "proto3";
+option go_package = "phishqlpb";
+package jloom6.phisql;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service PhishQLService {
+    rpc GetShows(GetShowsRequest) returns (GetShowsResponse) {
+        option (google.api.http) = {
+			get: "/v1/shows"
+		};
+    }
+}
+
+message GetShowsRequest {
+
+}
+
+message GetShowsResponse {
+    repeated Show shows = 1;
+}
+
+message Show {
+    int32 id = 1;
+    google.protobuf.Timestamp date = 2;
+    Artist artist = 3;
+    Venue venue = 4;
+    Tour tour = 5;
+    string notes = 6;
+    string soundcheck = 7;
+    repeated Set sets = 8;
+}
+
+message Artist {
+    int32 id = 1;
+    string name = 2;
+}
+
+message Venue {
+    int32 id = 1;
+    string name = 2;
+    string city = 3;
+    string state = 4;
+}
+
+message Tour {
+    int32 id = 1;
+    string name = 2;
+}
+
+message Set {
+    int32 id = 1;
+    string label = 2;
+    repeated SetSong songs = 3;
+}
+
+message SetSong {
+    Song song = 1;
+    Tag tag = 2;
+    string transition = 3;
+}
+
+message Song {
+    int32 id = 1;
+    string name = 2;
+}
+
+message Tag {
+    int32 id = 1;
+    string text = 2;
+}
