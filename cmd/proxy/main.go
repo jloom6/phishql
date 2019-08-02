@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"
@@ -11,11 +12,14 @@ import (
 )
 
 const (
-	endpoint = "localhost:9090"
 	port = ":8080"
 )
 
-func run() error {
+var (
+	endpoint = os.Getenv("PHISHQL_API_ENDPOINT")
+)
+
+func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -26,14 +30,10 @@ func run() error {
 	mux := runtime.NewServeMux()
 	err := phishqlpb.RegisterPhishQLServiceHandlerFromEndpoint(ctx, mux, endpoint, []grpc.DialOption{grpc.WithInsecure()})
 	if err != nil {
-		return err
+		log.Fatalf("failed to register handler: %v", err)
 	}
 
-	return http.ListenAndServe(port, mux)
-}
-
-func main() {
-	if err := run(); err != nil {
-		log.Fatal(err)
+	if err := http.ListenAndServe(port, mux); err != nil {
+		log.Fatalf("failed to listen: %v", err)
 	}
 }

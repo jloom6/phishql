@@ -8,10 +8,10 @@ bootstrap:
 
 .PHONY: bootstrap-db
 bootstrap-db:
-	docker exec -it phish-mysqldb mysql -u root -pkingofprussia -e "GRANT ALL PRIVILEGES ON *.* TO 'wilson'@'%'"
-	docker exec -it phish-mysqldb mysql -u root -pkingofprussia -e "DROP DATABASE IF EXISTS phish"
-	docker exec -it phish-mysqldb mysql -u root -pkingofprussia -e "CREATE DATABASE phish"
-	cat fixtures/init.sql | docker exec -i phish-mysqldb mysql -u root -pkingofprussia phish
+	docker exec -it phishql-mysql mysql -u root -pkingofprussia -e "GRANT ALL PRIVILEGES ON *.* TO 'wilson'@'%'"
+	docker exec -it phishql-mysql mysql -u root -pkingofprussia -e "DROP DATABASE IF EXISTS phish"
+	docker exec -it phishql-mysql mysql -u root -pkingofprussia -e "CREATE DATABASE phish"
+	cat fixtures/init.sql | docker exec -i phishql-mysql mysql -u root -pkingofprussia phish
 
 .PHONY: proto
 proto:
@@ -27,8 +27,10 @@ proto:
 .PHONY: build
 build:
 	dep ensure
-	go build -o ./cmd/api/phishql-api ./cmd/api/main.go
-	go build -o ./cmd/proxy/phishql-proxy ./cmd/proxy/main.go
+	GOOS=linux go build -o ./cmd/api/phishql-api ./cmd/api/main.go
+	GOOS=linux go build -o ./cmd/proxy/phishql-proxy ./cmd/proxy/main.go
+	docker build -f cmd/api/Dockerfile -t jloom6/phishql-api .
+	docker build -f cmd/proxy/Dockerfile -t jloom6/phishql-proxy .
 
 .PHONY: mocks
 mocks:
@@ -41,12 +43,12 @@ test:
 
 .PHONY: run-api
 run-api:
-	PHISHQL_MYSQL_HOST=$$(docker-machine ip default) ./cmd/api/phishql-api
+	docker run -p 9090:9090 --name=phishql-api -e "PHISHQL_MYSQL_HOST=$$(docker-machine ip default)" jloom6/phishql-api
 
 .PHONY: run-db
 run-db:
-	docker-compose up
+	docker run -p 3306:3306 --name phishql-mysql -e MYSQL_ROOT_PASSWORD=kingofprussia -e MYSQL_USER=wilson -e MYSQL_PASSWORD=wilson -e MYSQL_DATABASE=phish mysql
 
 .PHONY: run-proxy
 run-proxy:
-	./cmd/proxy/phishql-proxy
+	docker run -p 8080:8080 --name=phishql-proxy -e "PHISHQL_API_ENDPOINT=$$(docker-machine ip default):9090" jloom6/phishql-proxy

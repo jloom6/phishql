@@ -1,10 +1,10 @@
 version: '3.1'
 
 services:
-  db:
+  phishql-mysql:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
-    container_name: phish-mysqldb
+    container_name: phishql-mysql
     restart: always
     environment:
       MYSQL_USER: wilson
@@ -13,3 +13,32 @@ services:
       MYSQL_DATABASE: phish
     ports:
       - 3306:3306
+    networks:
+      - backend
+
+  phishql-api:
+    image: jloom6/phishql-api
+    container_name: phishql-api
+    environment:
+      PHISHQL_MYSQL_HOST: phishql-mysql
+    ports:
+      - 9090:9090
+    networks:
+      - backend
+    depends_on:
+      - phishql-mysql
+
+  phishql-proxy:
+    image: jloom6/phishql-proxy
+    container_name: phishql-proxy
+    environment:
+      PHISHQL_API_ENDPOINT: phishql-api
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+    depends_on:
+      - phishql-api
+
+networks:
+  backend:

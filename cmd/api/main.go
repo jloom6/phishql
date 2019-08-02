@@ -23,8 +23,7 @@ const (
 )
 
 var (
-	dbHost = os.Getenv("PHISHQL_MYSQL_HOST")
-	dbConnectionString = fmt.Sprintf("wilson:wilson@tcp(%s:3306)/phish?parseTime=true", dbHost)
+	dbConnectionString = fmt.Sprintf("wilson:wilson@tcp(%s:3306)/phish?parseTime=true", os.Getenv("PHISHQL_MYSQL_HOST"))
 )
 
 func main() {
