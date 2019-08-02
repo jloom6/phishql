@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: phish-mysqldb
+    restart: always
+    environment:
+      MYSQL_USER: wilson
+      MYSQL_PASSWORD: wilson
+      MYSQL_ROOT_PASSWORD: kingofprussia
+      MYSQL_DATABASE: phish
+    ports:
+      - 3306:3306

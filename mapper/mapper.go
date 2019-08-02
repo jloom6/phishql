@@ -80,6 +80,7 @@ func tourToProto(t *structs.Tour) *phishqlpb.Tour {
 	return &phishqlpb.Tour{
 		Id: int32(t.ID),
 		Name: t.Name,
+		Description: t.Description,
 	}
 }
 

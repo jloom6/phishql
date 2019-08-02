@@ -47,6 +47,7 @@ message Venue {
 message Tour {
     int32 id = 1;
     string name = 2;
+    string description = 3;
 }
 
 message Set {

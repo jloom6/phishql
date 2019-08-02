@@ -6,6 +6,13 @@ bootstrap:
 	go get -u github.com/twitchtv/retool
 	retool add github.com/golang/mock/mockgen origin/master
 
+.PHONY: bootstrap-db
+bootstrap-db:
+	docker exec -it phish-mysqldb mysql -u root -pkingofprussia -e "GRANT ALL PRIVILEGES ON *.* TO 'wilson'@'%'"
+	docker exec -it phish-mysqldb mysql -u root -pkingofprussia -e "DROP DATABASE IF EXISTS phish"
+	docker exec -it phish-mysqldb mysql -u root -pkingofprussia -e "CREATE DATABASE phish"
+	cat fixtures/init.sql | docker exec -i phish-mysqldb mysql -u root -pkingofprussia phish
+
 .PHONY: proto
 proto:
 	mkdir -p .gen/proto
@@ -30,12 +37,16 @@ mocks:
 .PHONY: test
 test:
 	go test ./... -coverprofile cover.out; go tool cover -func cover.out
-	rm cover.out
+	@rm cover.out
 
 .PHONY: run-api
 run-api:
-	./cmd/api/phishql-api
+	PHISHQL_MYSQL_HOST=$(docker-machine ip default) ./cmd/api/phishql-api
+
+.PHONY: run-db
+run-db:
+	docker-compose up
 
 .PHONY: run-proxy
 run-proxy:
-	./cmd/api/phishql-proxy
+	./cmd/proxy/phishql-proxy
