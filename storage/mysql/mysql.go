@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"context"
+	"log"
 
 	"github.com/jloom6/phishql/internal/db"
 	"github.com/jloom6/phishql/structs"
@@ -93,6 +94,7 @@ func (s *Store) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]st
 func (s *Store) getShows(ctx context.Context, _ structs.GetShowsRequest) (map[int]structs.Show, error) {
 	rows, err := s.db.QueryContext(ctx, getShowsQuery)
 	if err != nil {
+		log.Printf("getShows failed: %v", err)
 		return nil, err
 	}
 

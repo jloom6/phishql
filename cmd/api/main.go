@@ -24,10 +24,13 @@ const (
 
 var (
 	dbHost = os.Getenv("PHISHQL_MYSQL_HOST")
-	dbConnectionString = fmt.Sprintf("wilson:wilson@%s:3306/phish?parseTime=true", dbHost)
+	dbConnectionString = fmt.Sprintf("wilson:wilson@tcp(%s:3306)/phish?parseTime=true", dbHost)
 )
 
 func main() {
+	log.Printf("db: %s\n", dbConnectionString)
+	log.Printf("listening on port %s (gRPC)\n", port)
+
 	sqlDB, err := sql.Open(dbDriver, dbConnectionString)
 	if err != nil {
 		log.Fatalf("failed to open db: %v", err)

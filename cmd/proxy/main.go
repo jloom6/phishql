@@ -20,6 +20,9 @@ func run() error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	log.Printf("listening on port %s (HTTP)\n", port)
+	log.Printf("forwarding to %s (gRPC)\n", endpoint)
+
 	mux := runtime.NewServeMux()
 	err := phishqlpb.RegisterPhishQLServiceHandlerFromEndpoint(ctx, mux, endpoint, []grpc.DialOption{grpc.WithInsecure()})
 	if err != nil {

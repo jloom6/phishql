@@ -41,7 +41,7 @@ test:
 
 .PHONY: run-api
 run-api:
-	PHISHQL_MYSQL_HOST=$(docker-machine ip default) ./cmd/api/phishql-api
+	PHISHQL_MYSQL_HOST=$$(docker-machine ip default) ./cmd/api/phishql-api
 
 .PHONY: run-db
 run-db:

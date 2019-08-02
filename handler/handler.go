@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"log"
 
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"
 	"github.com/jloom6/phishql/mapper"
@@ -26,6 +27,8 @@ func New(p Params) *Handler {
 }
 
 func (h *Handler) GetShows(ctx context.Context, req *phishqlpb.GetShowsRequest) (*phishqlpb.GetShowsResponse, error) {
+	log.Printf("%v", req)
+
 	shows, err := h.service.GetShows(ctx, h.mapper.ProtoToGetShowsRequest(req))
 	if err != nil {
 		return nil, err
