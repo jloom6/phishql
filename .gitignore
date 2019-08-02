@@ -11,5 +11,6 @@ gen
 
 vendor
 .gen
+_tools
 cmd/api/phishql-api
 cmd/proxy/phishql-proxy
