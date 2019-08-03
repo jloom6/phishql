@@ -1,0 +1,196 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/jloom6/phishql/phishql.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/shows": {
+      "post": {
+        "operationId": "GetShows",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/phishqlGetShowsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phishqlGetShowsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PhishQLService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "phishqlArtist": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "phishqlGetShowsRequest": {
+      "type": "object"
+    },
+    "phishqlGetShowsResponse": {
+      "type": "object",
+      "properties": {
+        "shows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlShow"
+          }
+        }
+      }
+    },
+    "phishqlSet": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "label": {
+          "type": "string"
+        },
+        "songs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlSetSong"
+          }
+        }
+      }
+    },
+    "phishqlSetSong": {
+      "type": "object",
+      "properties": {
+        "song": {
+          "$ref": "#/definitions/phishqlSong"
+        },
+        "tag": {
+          "$ref": "#/definitions/phishqlTag"
+        },
+        "transition": {
+          "type": "string"
+        }
+      }
+    },
+    "phishqlShow": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "artist": {
+          "$ref": "#/definitions/phishqlArtist"
+        },
+        "venue": {
+          "$ref": "#/definitions/phishqlVenue"
+        },
+        "tour": {
+          "$ref": "#/definitions/phishqlTour"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "soundcheck": {
+          "type": "string"
+        },
+        "sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlSet"
+          }
+        }
+      }
+    },
+    "phishqlSong": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "phishqlTag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "phishqlTour": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "phishqlVenue": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

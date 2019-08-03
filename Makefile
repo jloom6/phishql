@@ -19,7 +19,7 @@ proto:
 	protoc -I/usr/local/include -I. \
 	 -I$(GOPATH)/src \
 	 -I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-	 --swagger_out=logtostderr=true:.gen \
+	 --swagger_out=logtostderr=true:. \
 	 --grpc-gateway_out=logtostderr=true:.gen \
 	 --go_out=plugins=grpc:.gen \
 	 proto/jloom6/phishql/phishql.proto

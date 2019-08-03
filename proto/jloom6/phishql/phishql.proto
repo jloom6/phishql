@@ -8,7 +8,8 @@ import "google/protobuf/timestamp.proto";
 service PhishQLService {
     rpc GetShows(GetShowsRequest) returns (GetShowsResponse) {
         option (google.api.http) = {
-			get: "/v1/shows"
+			post: "/v1/shows"
+			body: "*"
 		};
     }
 }
