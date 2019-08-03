@@ -24,6 +24,7 @@ func (m *Mapper) ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.Ge
 		Year: int(p.Year),
 		Month: int(p.Month),
 		Day: int(p.Day),
+		DayOfWeek: int(p.DayOfWeek),
 		City: p.City,
 		Country: p.Country,
 		State: p.State,

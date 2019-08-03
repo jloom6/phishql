@@ -58,6 +58,7 @@ type GetShowsRequest struct {
 	Year int
 	Month int
 	Day int
+	DayOfWeek int
 	City string
 	State string
 	Country string

@@ -70,6 +70,10 @@
           "type": "integer",
           "format": "int32"
         },
+        "day_of_week": {
+          "type": "integer",
+          "format": "int32"
+        },
         "city": {
           "type": "string"
         },

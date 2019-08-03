@@ -18,9 +18,10 @@ message GetShowsRequest {
     int32 year = 1;
     int32 month = 2;
     int32 day = 3;
-    string city = 4;
-    string state = 5;
-    string country = 6;
+    int32 day_of_week = 4; // Sunday = 1, Monday = 2, ..., Saturday = 7
+    string city = 5;
+    string state = 6;
+    string country = 7;
 }
 
 message GetShowsResponse {

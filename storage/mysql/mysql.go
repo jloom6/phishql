@@ -34,6 +34,7 @@ WHERE
     CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
@@ -52,6 +53,7 @@ WHERE
     CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
@@ -76,6 +78,7 @@ WHERE
     CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
     CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
@@ -134,6 +137,7 @@ func makeQueryArgs(req structs.GetShowsRequest) []interface{} {
 		req.Year, req.Year,
 		req.Month, req.Month,
 		req.Day, req.Day,
+		req.DayOfWeek, req.DayOfWeek,
 		req.City, req.City,
 		req.State, req.State,
 		req.Country, req.Country,
