@@ -53,7 +53,7 @@ This assumes that you have [jq installed](https://stedolan.github.io/jq/download
 curl -XPOST -d '{}' $(docker-machine ip default):8080/v1/shows | jq .
 ```
 
-Swagger json can be found in [here](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.swagger.json), just paste that into [this swagger editor](https://editor.swagger.io/) to see example HTTP requests. You can also use the [proto file](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.proto) and give gRPC a try on port :9090!
+Swagger json can be found in [here](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.swagger.json), just paste that into [this swagger editor](https://editor.swagger.io/) to see example HTTP requests. You can also use the [proto file](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.proto) and give [gRPC](https://grpc.io/) a try on port :9090!
 
 Congrats. [You did it!](https://www.youtube.com/watch?v=wxEAyJfIUI4)
 

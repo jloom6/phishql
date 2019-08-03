@@ -12,19 +12,25 @@ import (
 )
 
 func TestMapper_ProtoToGetShowsRequest(t *testing.T) {
+	req := &phishqlpb.GetShowsRequest{
+		Year: 1994,
+		Month: 10,
+		Day: 31,
+	}
+
 	tests := []struct{
 		name string
 		req *phishqlpb.GetShowsRequest
 		ret structs.GetShowsRequest
 	}{
 		{
-			name: "nil request",
-			ret: structs.GetShowsRequest{},
-		},
-		{
 			name: "non-nil request",
-			req: &phishqlpb.GetShowsRequest{},
-			ret: structs.GetShowsRequest{},
+			req: req,
+			ret: structs.GetShowsRequest{
+				Year: int(req.Year),
+				Month: int(req.Month),
+				Day: int(req.Day),
+			},
 		},
 	}
 

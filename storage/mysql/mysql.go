@@ -29,6 +29,10 @@ FROM
 		INNER JOIN artists ON shows.artist_id = artists.id
 		INNER JOIN venues ON shows.venue_id = venues.id
 		LEFT JOIN tours ON shows.tour_id = tours.id
+WHERE
+    CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END
 `
 	getSetsQuery = `
 SELECT
@@ -38,6 +42,11 @@ SELECT
     sets.label set_label
 FROM
 	sets
+		INNER JOIN shows ON sets.show_id = shows.id
+WHERE
+    CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END
 `
 	getSongsQuery = `
 SELECT
@@ -51,8 +60,13 @@ SELECT
 FROM
 	set_songs
 	    INNER JOIN sets ON set_songs.set_id = sets.id
+	    	INNER JOIN shows ON sets.show_id = shows.id
 		INNER JOIN songs ON set_songs.song_id = songs.id
 		LEFT JOIN tags ON set_songs.tag_id = tags.id
+WHERE
+    CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END
 ORDER BY
 	sets.show_id,
     sets.order,
@@ -91,8 +105,8 @@ func (s *Store) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]st
 	return hydrateShows(shows, sets, songs), nil
 }
 
-func (s *Store) getShows(ctx context.Context, _ structs.GetShowsRequest) (map[int]structs.Show, error) {
-	rows, err := s.db.QueryContext(ctx, getShowsQuery)
+func (s *Store) getShows(ctx context.Context, req structs.GetShowsRequest) (map[int]structs.Show, error) {
+	rows, err := s.db.QueryContext(ctx, getShowsQuery, makeQueryArgs(req)...)
 	if err != nil {
 		log.Printf("getShows failed: %v", err)
 		return nil, err
@@ -101,6 +115,14 @@ func (s *Store) getShows(ctx context.Context, _ structs.GetShowsRequest) (map[in
 	defer closeRows(rows)
 
 	return makeShows(rows)
+}
+
+func makeQueryArgs(req structs.GetShowsRequest) []interface{} {
+	return []interface{}{
+		req.Year, req.Year,
+		req.Month, req.Month,
+		req.Day, req.Day,
+	}
 }
 
 func closeRows(rows db.Rows) {
@@ -140,8 +162,8 @@ func makeShow(row db.Rows) (structs.Show, error) {
 	return show, nil
 }
 
-func (s *Store) getSets(ctx context.Context, _ structs.GetShowsRequest) (map[int]map[int]structs.Set, error) {
-	rows, err := s.db.QueryContext(ctx, getSetsQuery)
+func (s *Store) getSets(ctx context.Context, req structs.GetShowsRequest) (map[int]map[int]structs.Set, error) {
+	rows, err := s.db.QueryContext(ctx, getSetsQuery, makeQueryArgs(req)...)
 	if err != nil {
 		return nil, err
 	}
@@ -172,8 +194,8 @@ func makeSets(rows db.Rows) (map[int]map[int]structs.Set, error) {
 	return sets, nil
 }
 
-func (s *Store) getSongs(ctx context.Context, _ structs.GetShowsRequest) (map[int]map[int][]structs.SetSong, error) {
-	rows, err := s.db.QueryContext(ctx, getSongsQuery)
+func (s *Store) getSongs(ctx context.Context, req structs.GetShowsRequest) (map[int]map[int][]structs.SetSong, error) {
+	rows, err := s.db.QueryContext(ctx, getSongsQuery, makeQueryArgs(req)...)
 	if err != nil {
 		return nil, err
 	}

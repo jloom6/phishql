@@ -56,7 +56,21 @@
       }
     },
     "phishqlGetShowsRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     },
     "phishqlGetShowsResponse": {
       "type": "object",

@@ -170,7 +170,7 @@ func TestStore_GetShows(t *testing.T) {
 			mockSongRows := mocks.NewMockRows(mockCtrl)
 
 			// getShows
-			mockDB.EXPECT().QueryContext(context.Background(), getShowsQuery).Return(mockShowRows, test.getShowsErr).Times(1)
+			mockDB.EXPECT().QueryContext(context.Background(), getShowsQuery, gomock.Any()).Return(mockShowRows, test.getShowsErr).Times(1)
 			mockShowRows.EXPECT().Close().Return(nil).Times(test.showRowsCloseTimes)
 			gomock.InOrder(
 				mockShowRows.EXPECT().Next().Return(true).Times(test.showRowsNextTrueTimes),
@@ -179,7 +179,7 @@ func TestStore_GetShows(t *testing.T) {
 			mockShowRows.EXPECT().Scan(showDest...).Do(test.showRowsScanDo).Return(nil).Times(test.showRowsScanTimes)
 
 			// getSets
-			mockDB.EXPECT().QueryContext(context.Background(), getSetsQuery).Return(mockSetRows, test.getSetsErr).Times(test.getSetsTimes)
+			mockDB.EXPECT().QueryContext(context.Background(), getSetsQuery, gomock.Any()).Return(mockSetRows, test.getSetsErr).Times(test.getSetsTimes)
 			mockSetRows.EXPECT().Close().Return(nil).Times(test.setRowsCloseTimes)
 			gomock.InOrder(
 				mockSetRows.EXPECT().Next().Return(true).Times(test.setRowsNextTrueTimes),
@@ -188,7 +188,7 @@ func TestStore_GetShows(t *testing.T) {
 			mockSetRows.EXPECT().Scan(setDest...).Do(test.setRowsScanDo).Return(nil).Times(test.setRowsScanTimes)
 
 			// getSongs
-			mockDB.EXPECT().QueryContext(context.Background(), getSongsQuery).Return(mockSongRows, test.getSongsErr).Times(test.getSongsTimes)
+			mockDB.EXPECT().QueryContext(context.Background(), getSongsQuery, gomock.Any()).Return(mockSongRows, test.getSongsErr).Times(test.getSongsTimes)
 			mockSongRows.EXPECT().Close().Return(nil).Times(test.songRowsCloseTimes)
 			gomock.InOrder(
 				mockSongRows.EXPECT().Next().Return(true).Times(test.songRowsNextTrueTimes),

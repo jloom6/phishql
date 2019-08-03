@@ -20,7 +20,11 @@ func New() *Mapper {
 }
 
 func (m *Mapper) ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.GetShowsRequest {
-	return structs.GetShowsRequest{}
+	return structs.GetShowsRequest{
+		Year: int(p.Year),
+		Month: int(p.Month),
+		Day: int(p.Day),
+	}
 }
 
 func (m *Mapper) ShowsToProto(shows []structs.Show) ([]*phishqlpb.Show, error) {

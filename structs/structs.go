@@ -54,5 +54,7 @@ type Show struct {
 }
 
 type GetShowsRequest struct {
-
+	Year int
+	Month int
+	Day int
 }
