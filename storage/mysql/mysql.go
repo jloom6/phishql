@@ -200,9 +200,9 @@ func makeSongs(rows db.Rows) (map[int]map[int][]structs.SetSong, error) {
 			songs[showID] = map[int][]structs.SetSong{}
 		}
 
-		tagP := &tag
-		if tag == (structs.Tag{}) {
-			tagP = nil
+		var tagP *structs.Tag
+		if tag != (structs.Tag{}) {
+			tagP = &tag
 		}
 
 		songs[showID][setOrder] = append(songs[showID][setOrder], structs.SetSong{

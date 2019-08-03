@@ -1,8 +1,8 @@
 # phishql
 
-I got bored and did this. I have no shame. Yes it is extremely over engineered. But when the time comes for an enteprise ready, distributed, Phish setlist data solution with 100% code coverage we'll see who is laughing.
+I got bored and did this. I have no shame. Yes it is extremely over engineered. But when the time comes for an enterprise ready, distributed, Phish setlist data solution with 100% code coverage we'll see who's laughing.
 
-Some ask "Why use gRPC for this?", I ask "Why not?".
+Some would ask "Why use gRPC for this?", I ask "Why not?".
 
 Right now the actual query API is pretty bare bones, but I was more interested in setting up the infrastructure of this this. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time.
 
@@ -47,8 +47,10 @@ make run-hard
 
 **Call the REST API**
 
+This assumes that you have [jq installed](https://stedolan.github.io/jq/download/). You obviously don't need it but it makes everything look nice.
+
 ```
-curl $(docker-machine ip default):8080/v1/shows | jq .
+curl $(docker-machine ip):8080/v1/shows | jq .
 ```
 
 Congrats. [You did it!](https://www.youtube.com/watch?v=wxEAyJfIUI4)
