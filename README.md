@@ -4,7 +4,7 @@ I got bored and did this. I have no shame. Yes it is extremely over engineered. 
 
 Some would ask "Why use gRPC for this?", I ask "Why not?".
 
-Right now the actual query API is pretty bare bones, but I was more interested in setting up the infrastructure of this this. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time.
+Right now the actual query API is pretty bare bones, as in it literally only returns all of shows, but I was more interested in setting up the infrastructure of this this. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time.
 
 ## Installation
 
