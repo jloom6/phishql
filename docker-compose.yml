@@ -16,6 +16,15 @@ services:
     networks:
       - backend
 
+  phishql-migration:
+    image: jloom6/phishql-migration
+    container_name: phishql-migration
+    command: ["./wait-for-it/wait-for-it.sh", "phishql-mysql:3306", "--", "./migration.sh"]
+    networks:
+      - backend
+    depends_on:
+      - phishql-mysql
+
   phishql-api:
     image: jloom6/phishql-api
     container_name: phishql-api
@@ -32,7 +41,7 @@ services:
     image: jloom6/phishql-proxy
     container_name: phishql-proxy
     environment:
-      PHISHQL_API_ENDPOINT: phishql-api
+      PHISHQL_API_ENDPOINT: phishql-api:9090
     ports:
       - 8080:8080
     networks:

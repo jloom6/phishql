@@ -27,10 +27,12 @@ proto:
 .PHONY: build
 build:
 	dep ensure
+	make proto
 	GOOS=linux go build -o ./cmd/api/phishql-api ./cmd/api/main.go
 	GOOS=linux go build -o ./cmd/proxy/phishql-proxy ./cmd/proxy/main.go
 	docker build -f cmd/api/Dockerfile -t jloom6/phishql-api .
 	docker build -f cmd/proxy/Dockerfile -t jloom6/phishql-proxy .
+	docker build -f cmd/migration/Dockerfile -t jloom6/phishql-migration .
 
 .PHONY: mocks
 mocks:
@@ -52,3 +54,12 @@ run-db:
 .PHONY: run-proxy
 run-proxy:
 	docker run -p 8080:8080 --name=phishql-proxy -e "PHISHQL_API_ENDPOINT=$$(docker-machine ip default):9090" jloom6/phishql-proxy
+
+.PHONY: run-all
+run-all:
+	docker-compose up
+
+.PHONY: run-hard
+run-hard:
+	make build
+	make run-all
