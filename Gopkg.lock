@@ -133,10 +133,9 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1233ed1b527b0ff66c3df5879f7e80b1d8631e030cc45821b77fc25acd0d72a6"
+  digest = "1:3565a93b7692277a5dea355bc47bd6315754f3246ed07a224be6aec28972a805"
   name = "google.golang.org/genproto"
   packages = [
-    "googleapis/api/annotations",
     "googleapis/api/httpbody",
     "googleapis/rpc/status",
     "protobuf/field_mask",
@@ -192,18 +191,11 @@
   input-imports = [
     "github.com/go-sql-driver/mysql",
     "github.com/golang/mock/gomock",
-    "github.com/golang/protobuf/proto",
     "github.com/golang/protobuf/ptypes",
-    "github.com/golang/protobuf/ptypes/timestamp",
     "github.com/grpc-ecosystem/grpc-gateway/runtime",
-    "github.com/grpc-ecosystem/grpc-gateway/utilities",
     "github.com/stretchr/testify/assert",
     "golang.org/x/net/context",
-    "google.golang.org/genproto/googleapis/api/annotations",
     "google.golang.org/grpc",
-    "google.golang.org/grpc/codes",
-    "google.golang.org/grpc/grpclog",
-    "google.golang.org/grpc/status",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

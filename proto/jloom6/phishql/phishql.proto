@@ -18,6 +18,9 @@ message GetShowsRequest {
     int32 year = 1;
     int32 month = 2;
     int32 day = 3;
+    string city = 4;
+    string state = 5;
+    string country = 6;
 }
 
 message GetShowsResponse {
@@ -45,6 +48,7 @@ message Venue {
     string name = 2;
     string city = 3;
     string state = 4;
+    string country = 5;
 }
 
 message Tour {

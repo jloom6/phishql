@@ -40,6 +40,7 @@ mocks:
 
 .PHONY: test
 test:
+	make mocks
 	go test ./... -coverprofile cover.out; go tool cover -func cover.out
 	@rm cover.out
 
@@ -59,7 +60,15 @@ run-proxy:
 run-all:
 	docker-compose up
 
+.PHONY: clean
+clean:
+	-docker stop phishql-proxy phishql-api phishql-migration phishql-mysql
+	-docker rm phishql-proxy phishql-api phishql-migration phishql-mysql
+	-docker image rm jloom6/phishql-migration jloom6/phishql-proxy jloom6/phishql-api
+	rm -rf .gen vendor
+
 .PHONY: run-hard
 run-hard:
+	make clean
 	make build
 	make run-all

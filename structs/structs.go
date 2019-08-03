@@ -12,6 +12,7 @@ type Venue struct {
 	Name string
 	City string
 	State string
+	Country string
 }
 
 type Tour struct {
@@ -57,4 +58,7 @@ type GetShowsRequest struct {
 	Year int
 	Month int
 	Day int
+	City string
+	State string
+	Country string
 }

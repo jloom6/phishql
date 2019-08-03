@@ -69,6 +69,15 @@
         "day": {
           "type": "integer",
           "format": "int32"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
         }
       }
     },
@@ -202,6 +211,9 @@
           "type": "string"
         },
         "state": {
+          "type": "string"
+        },
+        "country": {
           "type": "string"
         }
       }

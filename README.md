@@ -1,6 +1,6 @@
 # phishql
 
-I got bored and did this. I have no shame. Yes it is extremely over engineered. But when the time comes for an enterprise ready, distributed, Phish setlist data solution with 100% code coverage we'll see who's laughing.
+I got bored and did this. I have no shame. Yes it is extremely over-engineered. But when the time comes for an enterprise level, distributed, Phish setlist data solution with 100% code coverage we'll see who's laughing.
 
 Some would ask "Why use gRPC for this?", I ask "Why not?".
 

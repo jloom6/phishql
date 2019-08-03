@@ -24,6 +24,9 @@ func (m *Mapper) ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.Ge
 		Year: int(p.Year),
 		Month: int(p.Month),
 		Day: int(p.Day),
+		City: p.City,
+		Country: p.Country,
+		State: p.State,
 	}
 }
 
@@ -73,6 +76,7 @@ func venueToProto(v structs.Venue) *phishqlpb.Venue {
 		Name: v.Name,
 		City: v.City,
 		State: v.State,
+		Country: v.Country,
 	}
 }
 

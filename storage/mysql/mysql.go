@@ -19,6 +19,7 @@ SELECT
     venues.name venue_name,
     venues.city venue_city,
     venues.state venue_state,
+    venues.country venue_country,
     COALESCE(tours.id, 0) tour_id,
     COALESCE(tours.name, '') tour_name,
     COALESCE(tours.desc, '') tour_description,
@@ -32,7 +33,10 @@ FROM
 WHERE
     CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
 `
 	getSetsQuery = `
 SELECT
@@ -43,10 +47,14 @@ SELECT
 FROM
 	sets
 		INNER JOIN shows ON sets.show_id = shows.id
+			INNER JOIN venues on shows.venue_id = venues.id
 WHERE
     CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
 `
 	getSongsQuery = `
 SELECT
@@ -61,12 +69,16 @@ FROM
 	set_songs
 	    INNER JOIN sets ON set_songs.set_id = sets.id
 	    	INNER JOIN shows ON sets.show_id = shows.id
+	    		INNER JOIN venues on shows.venue_id = venues.id
 		INNER JOIN songs ON set_songs.song_id = songs.id
 		LEFT JOIN tags ON set_songs.tag_id = tags.id
 WHERE
     CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
     CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END
+    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
+    CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
 ORDER BY
 	sets.show_id,
     sets.order,
@@ -122,6 +134,9 @@ func makeQueryArgs(req structs.GetShowsRequest) []interface{} {
 		req.Year, req.Year,
 		req.Month, req.Month,
 		req.Day, req.Day,
+		req.City, req.City,
+		req.State, req.State,
+		req.Country, req.Country,
 	}
 }
 
@@ -149,8 +164,8 @@ func makeShow(row db.Rows) (structs.Show, error) {
 	var tour structs.Tour
 
 	err := row.Scan(&show.ID, &show.Date, &show.Artist.ID, &show.Artist.Name, &show.Venue.ID,
-		&show.Venue.Name, &show.Venue.City, &show.Venue.State, &tour.ID, &tour.Name,
-		&tour.Description, &show.Notes, &show.Soundcheck)
+		&show.Venue.Name, &show.Venue.City, &show.Venue.State, &show.Venue.Country, &tour.ID,
+		&tour.Name, &tour.Description, &show.Notes, &show.Soundcheck)
 	if err != nil {
 		return structs.Show{}, err
 	}

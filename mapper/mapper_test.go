@@ -16,6 +16,9 @@ func TestMapper_ProtoToGetShowsRequest(t *testing.T) {
 		Year: 1994,
 		Month: 10,
 		Day: 31,
+		City: "Glens Falls",
+		State: "NY",
+		Country: "USA",
 	}
 
 	tests := []struct{
@@ -30,6 +33,9 @@ func TestMapper_ProtoToGetShowsRequest(t *testing.T) {
 				Year: int(req.Year),
 				Month: int(req.Month),
 				Day: int(req.Day),
+				City: req.City,
+				State: req.State,
+				Country: req.Country,
 			},
 		},
 	}
@@ -62,6 +68,7 @@ func TestMapper_ShowsToProto(t *testing.T) {
 			Name: "Madison Square Garden",
 			City: "New York",
 			State: "NY",
+			Country: "USA",
 		},
 		Tour: &structs.Tour{
 			ID: 2017,
@@ -105,6 +112,7 @@ func TestMapper_ShowsToProto(t *testing.T) {
 			Name: show.Venue.Name,
 			City: show.Venue.City,
 			State: show.Venue.State,
+			Country: show.Venue.Country,
 		},
 		Tour: &phishqlpb.Tour{
 			Id: int32(show.Tour.ID),

@@ -13,8 +13,9 @@ import (
 )
 
 func TestStore_GetShows(t *testing.T) {
-	showDest := []interface{}{gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(),
-		gomock.Any(), gomock.Any(),gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()}
+	showDest := []interface{}{gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(),
+		gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(),gomock.Any(), gomock.Any(),
+		gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()}
 	setDest := []interface{}{gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()}
 	songDest := []interface{}{gomock.Any(), gomock.Any(), gomock.Any(),
 		gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()}
@@ -31,6 +32,7 @@ func TestStore_GetShows(t *testing.T) {
 			Name: "The Gorge",
 			City: "George",
 			State: "WA",
+			Country: "USA",
 		},
 		Tour: &structs.Tour{
 			ID: 4,
@@ -123,11 +125,12 @@ func TestStore_GetShows(t *testing.T) {
 				*(dest[5].(*string)) = show.Venue.Name
 				*(dest[6].(*string)) = show.Venue.City
 				*(dest[7].(*string)) = show.Venue.State
-				*(dest[8].(*int)) = show.Tour.ID
-				*(dest[9].(*string)) = show.Tour.Name
-				*(dest[10].(*string)) = show.Tour.Description
-				*(dest[11].(*string)) = show.Notes
-				*(dest[12].(*string)) = show.Soundcheck
+				*(dest[8].(*string)) = show.Venue.Country
+				*(dest[9].(*int)) = show.Tour.ID
+				*(dest[10].(*string)) = show.Tour.Name
+				*(dest[11].(*string)) = show.Tour.Description
+				*(dest[12].(*string)) = show.Notes
+				*(dest[13].(*string)) = show.Soundcheck
 			},
 			showRowsScanTimes: 1,
 			getSetsTimes: 1,
@@ -209,8 +212,9 @@ func TestStore_GetShows(t *testing.T) {
 }
 
 func TestMakeShows(t *testing.T) {
-	dest := []interface{}{gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(),
-		gomock.Any(), gomock.Any(),gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()}
+	dest := []interface{}{gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(),
+		gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(),gomock.Any(), gomock.Any(),
+		gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()}
 
 	show := structs.Show{
 		ID: 420,
@@ -224,6 +228,7 @@ func TestMakeShows(t *testing.T) {
 			Name: "The Gorge",
 			City: "George",
 			State: "WA",
+			Country: "USA",
 		},
 		Tour: &structs.Tour{
 			ID: 4,
@@ -263,11 +268,12 @@ func TestMakeShows(t *testing.T) {
 				*(dest[5].(*string)) = show.Venue.Name
 				*(dest[6].(*string)) = show.Venue.City
 				*(dest[7].(*string)) = show.Venue.State
-				*(dest[8].(*int)) = show.Tour.ID
-				*(dest[9].(*string)) = show.Tour.Name
-				*(dest[10].(*string)) = show.Tour.Description
-				*(dest[11].(*string)) = show.Notes
-				*(dest[12].(*string)) = show.Soundcheck
+				*(dest[8].(*string)) = show.Venue.Country
+				*(dest[9].(*int)) = show.Tour.ID
+				*(dest[10].(*string)) = show.Tour.Name
+				*(dest[11].(*string)) = show.Tour.Description
+				*(dest[12].(*string)) = show.Notes
+				*(dest[13].(*string)) = show.Soundcheck
 			},
 			ret: map[int]structs.Show{
 				show.ID: show,
