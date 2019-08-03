@@ -6,6 +6,8 @@ Some would ask "Why use gRPC for this?", I ask "Why not?".
 
 Right now the actual query API is pretty bare bones, but I was more interested in learning docker. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time. I think the next thing I want to try is making the conditions composable, (i.e. Get shows from the state of VT AND occured on a Sunday OR Wednesday).
 
+Expect breaking changes. LOTS OF THEM.
+
 ## Installation
 
 **Clone the repository**
