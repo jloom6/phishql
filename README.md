@@ -4,7 +4,7 @@ I got bored and did this. I have no shame. Yes it is extremely over engineered. 
 
 Some would ask "Why use gRPC for this?", I ask "Why not?".
 
-Right now the actual query API is pretty bare bones, as in it literally only returns all of the shows, but I was more interested in learning docker. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time.
+Right now the actual query API is pretty bare bones, but I was more interested in learning docker. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time.
 
 ## Installation
 
@@ -50,7 +50,7 @@ make run-hard
 This assumes that you have [jq installed](https://stedolan.github.io/jq/download/). You obviously don't need it but it makes everything look nice.
 
 ```
-curl -XPOST -d '{}' $(docker-machine ip default):8080/v1/shows | jq .
+curl -XPOST -d '{}' $(docker-machine ip):8080/v1/shows | jq .
 ```
 
 Swagger json can be found in [here](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.swagger.json), just paste that into [this swagger editor](https://editor.swagger.io/) to see example HTTP requests. You can also use the [proto file](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.proto) and give [gRPC](https://grpc.io/) a try on port :9090!
