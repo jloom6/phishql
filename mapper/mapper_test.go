@@ -13,13 +13,28 @@ import (
 
 func TestMapper_ProtoToGetShowsRequest(t *testing.T) {
 	req := &phishqlpb.GetShowsRequest{
-		Year: 1994,
-		Month: 10,
-		Day: 31,
-		DayOfWeek: 2,
-		City: "Glens Falls",
-		State: "NY",
-		Country: "USA",
+		Condition: &phishqlpb.Condition{
+			Condition: &phishqlpb.Condition_And{
+				And: &phishqlpb.Conditions{
+					Conditions: []*phishqlpb.Condition{
+						{
+							Condition: &phishqlpb.Condition_Base{
+								Base: &phishqlpb.BaseCondition{
+									Year: 1994,
+									Month: 10,
+									Day: 31,
+									DayOfWeek: 2,
+									City: "Glens Falls",
+									State: "NY",
+									Country: "USA",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+
 	}
 
 	tests := []struct{
@@ -31,13 +46,21 @@ func TestMapper_ProtoToGetShowsRequest(t *testing.T) {
 			name: "non-nil request",
 			req: req,
 			ret: structs.GetShowsRequest{
-				Year: int(req.Year),
-				Month: int(req.Month),
-				Day: int(req.Day),
-				DayOfWeek: int(req.DayOfWeek),
-				City: req.City,
-				State: req.State,
-				Country: req.Country,
+				Condition: structs.Condition{
+					Ands: []structs.Condition{
+						{
+							Base: structs.BaseCondition{
+								Year: int(req.Condition.GetAnd().Conditions[0].GetBase().Year),
+								Month: int(req.Condition.GetAnd().Conditions[0].GetBase().Month),
+								Day: int(req.Condition.GetAnd().Conditions[0].GetBase().Day),
+								DayOfWeek: int(req.Condition.GetAnd().Conditions[0].GetBase().DayOfWeek),
+								City: req.Condition.GetAnd().Conditions[0].GetBase().City,
+								State: req.Condition.GetAnd().Conditions[0].GetBase().State,
+								Country: req.Condition.GetAnd().Conditions[0].GetBase().Country,
+							},
+						},
+					},
+				},
 			},
 		},
 	}

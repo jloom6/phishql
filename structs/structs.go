@@ -1,6 +1,8 @@
 package structs
 
-import "time"
+import (
+	"time"
+)
 
 type Artist struct {
 	ID int
@@ -55,6 +57,16 @@ type Show struct {
 }
 
 type GetShowsRequest struct {
+	Condition Condition
+}
+
+type Condition struct {
+	Base BaseCondition
+	Ands []Condition
+	Ors []Condition
+}
+
+type BaseCondition struct {
 	Year int
 	Month int
 	Day int
