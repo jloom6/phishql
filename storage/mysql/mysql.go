@@ -2,90 +2,83 @@ package mysql
 
 import (
 	"context"
-	"log"
+	"fmt"
+	"strings"
 
 	"github.com/jloom6/phishql/internal/db"
 	"github.com/jloom6/phishql/structs"
 )
 
 const (
+	baseWhereCondition = `
+CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+`
+
 	getShowsQuery = `
 SELECT
 	shows.id show_id,
 	shows.date show_date,
 	artists.id artist_id,
-    artists.name artist_name,
-    venues.id venue_id,
-    venues.name venue_name,
-    venues.city venue_city,
-    venues.state venue_state,
-    venues.country venue_country,
-    COALESCE(tours.id, 0) tour_id,
-    COALESCE(tours.name, '') tour_name,
-    COALESCE(tours.desc, '') tour_description,
-    COALESCE(shows.notes, '') show_notes,
-    COALESCE(shows.soundcheck, '') show_soundcheck
+	artists.name artist_name,
+	venues.id venue_id,
+	venues.name venue_name,
+	venues.city venue_city,
+	venues.state venue_state,
+	venues.country venue_country,
+	COALESCE(tours.id, 0) tour_id,
+	COALESCE(tours.name, '') tour_name,
+	COALESCE(tours.desc, '') tour_description,
+	COALESCE(shows.notes, '') show_notes,
+	COALESCE(shows.soundcheck, '') show_soundcheck
 FROM
 	shows
 		INNER JOIN artists ON shows.artist_id = artists.id
 		INNER JOIN venues ON shows.venue_id = venues.id
 		LEFT JOIN tours ON shows.tour_id = tours.id
 WHERE
-    CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+	%s
 `
 	getSetsQuery = `
 SELECT
 	sets.show_id show_id,
-    sets.order set_order,
+	sets.order set_order,
 	sets.id set_id,
-    sets.label set_label
+	sets.label set_label
 FROM
 	sets
 		INNER JOIN shows ON sets.show_id = shows.id
 			INNER JOIN venues on shows.venue_id = venues.id
 WHERE
-    CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+	%s
 `
 	getSongsQuery = `
 SELECT
 	sets.show_id show_id,
-    sets.order set_order,
-    songs.id song_id,
-    songs.name song_name,
-    COALESCE(tags.id, 0) tag_id,
-    COALESCE(tags.text, '') tag_text,
-    COALESCE(set_songs.transition, '') song_transition
+	sets.order set_order,
+	songs.id song_id,
+	songs.name song_name,
+	COALESCE(tags.id, 0) tag_id,
+	COALESCE(tags.text, '') tag_text,
+	COALESCE(set_songs.transition, '') song_transition
 FROM
 	set_songs
-	    INNER JOIN sets ON set_songs.set_id = sets.id
-	    	INNER JOIN shows ON sets.show_id = shows.id
-	    		INNER JOIN venues on shows.venue_id = venues.id
+		INNER JOIN sets ON set_songs.set_id = sets.id
+			INNER JOIN shows ON sets.show_id = shows.id
+				INNER JOIN venues on shows.venue_id = venues.id
 		INNER JOIN songs ON set_songs.song_id = songs.id
 		LEFT JOIN tags ON set_songs.tag_id = tags.id
 WHERE
-    CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
-    CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
-    CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+	%s
 ORDER BY
 	sets.show_id,
-    sets.order,
-    set_songs.order
+	sets.order,
+	set_songs.order
 `
 )
 
@@ -121,9 +114,10 @@ func (s *Store) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]st
 }
 
 func (s *Store) getShows(ctx context.Context, req structs.GetShowsRequest) (map[int]structs.Show, error) {
-	rows, err := s.db.QueryContext(ctx, getShowsQuery, makeQueryArgs(req)...)
+	query, args := makeQueryAndArgs(getShowsQuery, req.Condition)
+
+	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
-		log.Printf("getShows failed: %v", err)
 		return nil, err
 	}
 
@@ -132,15 +126,59 @@ func (s *Store) getShows(ctx context.Context, req structs.GetShowsRequest) (map[
 	return makeShows(rows)
 }
 
-func makeQueryArgs(req structs.GetShowsRequest) []interface{} {
+func makeQueryAndArgs(baseQuery string, c structs.Condition) (string, []interface{}) {
+	whereClause, args := makeClauseAndArgs(c)
+
+	return fmt.Sprintf(baseQuery, whereClause), args
+}
+
+func makeClauseAndArgs(c structs.Condition) (string, []interface{}) {
+	if c.Ands != nil {
+		return makeAndClauseAndArgs(c)
+	}
+
+	if c.Ors != nil {
+		return makeOrClauseAndArgs(c)
+	}
+
+	return makeBaseClauseAndArgs(c)
+}
+
+func makeAndClauseAndArgs(c structs.Condition) (string, []interface{}) {
+	return makeClausesAndArgs(c.Ands, " AND ")
+}
+
+func makeClausesAndArgs(cs []structs.Condition, joiner string) (string, []interface{}) {
+	var whereClauses []string
+	var allArgs []interface{}
+
+	for _, orCondition := range cs {
+		whereClause, args := makeClauseAndArgs(orCondition)
+
+		whereClauses = append(whereClauses, fmt.Sprintf("(%s)", whereClause))
+		allArgs = append(allArgs, args...)
+	}
+
+	return strings.Join(whereClauses, joiner), allArgs
+}
+
+func makeOrClauseAndArgs(c structs.Condition) (string, []interface{}) {
+	return makeClausesAndArgs(c.Ors, " OR ")
+}
+
+func makeBaseClauseAndArgs(c structs.Condition) (string, []interface{}) {
+	return baseWhereCondition, makeBaseWhereArgs(c.Base)
+}
+
+func makeBaseWhereArgs(bc structs.BaseCondition) []interface{} {
 	return []interface{}{
-		req.Year, req.Year,
-		req.Month, req.Month,
-		req.Day, req.Day,
-		req.DayOfWeek, req.DayOfWeek,
-		req.City, req.City,
-		req.State, req.State,
-		req.Country, req.Country,
+		bc.Year, bc.Year,
+		bc.Month, bc.Month,
+		bc.Day, bc.Day,
+		bc.DayOfWeek, bc.DayOfWeek,
+		bc.City, bc.City,
+		bc.State, bc.State,
+		bc.Country, bc.Country,
 	}
 }
 
@@ -182,7 +220,9 @@ func makeShow(row db.Rows) (structs.Show, error) {
 }
 
 func (s *Store) getSets(ctx context.Context, req structs.GetShowsRequest) (map[int]map[int]structs.Set, error) {
-	rows, err := s.db.QueryContext(ctx, getSetsQuery, makeQueryArgs(req)...)
+	query, args := makeQueryAndArgs(getSetsQuery, req.Condition)
+
+	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +254,9 @@ func makeSets(rows db.Rows) (map[int]map[int]structs.Set, error) {
 }
 
 func (s *Store) getSongs(ctx context.Context, req structs.GetShowsRequest) (map[int]map[int][]structs.SetSong, error) {
-	rows, err := s.db.QueryContext(ctx, getSongsQuery, makeQueryArgs(req)...)
+	query, args := makeQueryAndArgs(getSongsQuery, req.Condition)
+
+	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}

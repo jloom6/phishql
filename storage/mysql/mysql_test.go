@@ -173,7 +173,7 @@ func TestStore_GetShows(t *testing.T) {
 			mockSongRows := mocks.NewMockRows(mockCtrl)
 
 			// getShows
-			mockDB.EXPECT().QueryContext(context.Background(), getShowsQuery, gomock.Any()).Return(mockShowRows, test.getShowsErr).Times(1)
+			mockDB.EXPECT().QueryContext(context.Background(), gomock.Any(), gomock.Any()).Return(mockShowRows, test.getShowsErr).Times(1)
 			mockShowRows.EXPECT().Close().Return(nil).Times(test.showRowsCloseTimes)
 			gomock.InOrder(
 				mockShowRows.EXPECT().Next().Return(true).Times(test.showRowsNextTrueTimes),
@@ -182,7 +182,7 @@ func TestStore_GetShows(t *testing.T) {
 			mockShowRows.EXPECT().Scan(showDest...).Do(test.showRowsScanDo).Return(nil).Times(test.showRowsScanTimes)
 
 			// getSets
-			mockDB.EXPECT().QueryContext(context.Background(), getSetsQuery, gomock.Any()).Return(mockSetRows, test.getSetsErr).Times(test.getSetsTimes)
+			mockDB.EXPECT().QueryContext(context.Background(), gomock.Any(), gomock.Any()).Return(mockSetRows, test.getSetsErr).Times(test.getSetsTimes)
 			mockSetRows.EXPECT().Close().Return(nil).Times(test.setRowsCloseTimes)
 			gomock.InOrder(
 				mockSetRows.EXPECT().Next().Return(true).Times(test.setRowsNextTrueTimes),
@@ -191,7 +191,7 @@ func TestStore_GetShows(t *testing.T) {
 			mockSetRows.EXPECT().Scan(setDest...).Do(test.setRowsScanDo).Return(nil).Times(test.setRowsScanTimes)
 
 			// getSongs
-			mockDB.EXPECT().QueryContext(context.Background(), getSongsQuery, gomock.Any()).Return(mockSongRows, test.getSongsErr).Times(test.getSongsTimes)
+			mockDB.EXPECT().QueryContext(context.Background(), gomock.Any(), gomock.Any()).Return(mockSongRows, test.getSongsErr).Times(test.getSongsTimes)
 			mockSongRows.EXPECT().Close().Return(nil).Times(test.songRowsCloseTimes)
 			gomock.InOrder(
 				mockSongRows.EXPECT().Next().Return(true).Times(test.songRowsNextTrueTimes),
@@ -207,6 +207,81 @@ func TestStore_GetShows(t *testing.T) {
 
 			assert.Equal(_t, test.ret, ret)
 			assert.Equal(_t, test.err, err)
+		})
+	}
+}
+
+func TestMakeClauseAndArgs(t *testing.T) {
+	tests := []struct{
+		name string
+		condition structs.Condition
+		clause string
+		args []interface{}
+	}{
+		{
+			name: "and or base",
+			condition: structs.Condition{
+				Ands: []structs.Condition{
+					{
+						Ors: []structs.Condition{
+							{
+								Base: structs.BaseCondition{
+									DayOfWeek: 1,
+								},
+							},
+							{
+								Base: structs.BaseCondition{
+									DayOfWeek: 7,
+								},
+							},
+						},
+					},
+					{
+						Base: structs.BaseCondition{
+							State: "NJ",
+						},
+					},
+				},
+			},
+			clause: `((
+CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+) OR (
+CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+)) AND (
+CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
+CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+)`,
+			args: []interface{}{
+				0, 0, 0, 0, 0, 0, 1, 1, "", "", "", "", "", "",
+				0, 0, 0, 0, 0, 0, 7, 7, "", "", "", "", "", "",
+				0, 0, 0, 0, 0, 0, 0, 0, "", "", "NJ", "NJ", "", "",
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			clause, args := makeClauseAndArgs(test.condition)
+
+			assert.Equal(_t, test.clause, clause)
+			assert.Equal(_t, test.args, args)
 		})
 	}
 }

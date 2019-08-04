@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"
@@ -16,7 +15,7 @@ const (
 )
 
 var (
-	endpoint = os.Getenv("PHISHQL_API_ENDPOINT")
+	endpoint = "localhost:9090"//os.Getenv("PHISHQL_API_ENDPOINT")
 )
 
 func main() {

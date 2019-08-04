@@ -15,6 +15,22 @@ service PhishQLService {
 }
 
 message GetShowsRequest {
+    Condition condition = 1;
+}
+
+message Condition {
+    oneof condition {
+        Conditions and = 1;
+        Conditions or = 2;
+        BaseCondition base = 3;
+    }
+}
+
+message Conditions {
+    repeated Condition conditions = 1;
+}
+
+message BaseCondition {
     int32 year = 1;
     int32 month = 2;
     int32 day = 3;

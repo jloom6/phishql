@@ -21,6 +21,24 @@ func New() *Mapper {
 
 func (m *Mapper) ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.GetShowsRequest {
 	return structs.GetShowsRequest{
+		Condition: protoToCondition(p.Condition),
+	}
+}
+
+func protoToCondition(p *phishqlpb.Condition) structs.Condition {
+	return structs.Condition{
+		Base: protoToBaseCondition(p.GetBase()),
+		Ands: protoToConditions(p.GetAnd()),
+		Ors: protoToConditions(p.GetOr()),
+	}
+}
+
+func protoToBaseCondition(p *phishqlpb.BaseCondition) structs.BaseCondition {
+	if p == nil {
+		return structs.BaseCondition{}
+	}
+
+	return structs.BaseCondition{
 		Year: int(p.Year),
 		Month: int(p.Month),
 		Day: int(p.Day),
@@ -29,6 +47,20 @@ func (m *Mapper) ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.Ge
 		Country: p.Country,
 		State: p.State,
 	}
+}
+
+func protoToConditions(ps *phishqlpb.Conditions) []structs.Condition {
+	if ps == nil {
+		return nil
+	}
+
+	conditions := make([]structs.Condition, 0, len(ps.Conditions))
+
+	for _, p := range ps.Conditions {
+		conditions = append(conditions, protoToCondition(p))
+	}
+
+	return conditions
 }
 
 func (m *Mapper) ShowsToProto(shows []structs.Show) ([]*phishqlpb.Show, error) {
