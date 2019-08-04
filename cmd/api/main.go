@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"
@@ -22,7 +23,7 @@ const (
 )
 
 var (
-	dbConnectionString = fmt.Sprintf("wilson:wilson@tcp(192.168.99.100:3306)/phish?parseTime=true")//, os.Getenv("PHISHQL_MYSQL_HOST"))
+	dbConnectionString = fmt.Sprintf("wilson:wilson@tcp(%s:3306)/phish?parseTime=true", os.Getenv("PHISHQL_MYSQL_HOST"))
 )
 
 func main() {
