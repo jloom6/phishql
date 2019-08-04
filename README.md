@@ -4,7 +4,7 @@ I got bored and did this. I have no shame. Yes it is extremely over-engineered. 
 
 Some would ask "Why use gRPC for this?", I ask "Why not?".
 
-Right now the actual query API is pretty bare bones, but I was more interested in learning docker. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time. I think the next thing I want to try is making the conditions composable, (i.e. Get shows from the state of VT AND occured on a Sunday OR Wednesday).
+Right now the actual query API is pretty bare bones, but I was more interested in learning docker. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time. I think the next thing will be shows where they play certain songs.
 
 Expect breaking changes. LOTS OF THEM.
 
@@ -56,6 +56,68 @@ curl -XPOST -d '{}' $(docker-machine ip):8080/v1/shows | jq .
 ```
 
 Swagger json can be found in [here](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.swagger.json), just paste that into [this swagger editor](https://editor.swagger.io/) to see example HTTP requests. You can also use the [proto file](https://github.com/jloom6/phishql/blob/master/proto/jloom6/phishql/phishql.proto) and give [gRPC](https://grpc.io/) a try on port :9090!
+
+**Base Conditions**
+
+You can search for shows with basic conditions like this
+
+```
+curl -XPOST -d '{
+    "condition": {
+        "base": {
+            "year": 2019,
+            "month": 7,
+            "day": 14,
+            "day_of_week": 1,
+            "city": "East Troy",
+            "state": "WI",
+            "country": "USA"
+        }
+    }
+}' $(docker-machine ip):8080/v1/shows | jq .
+```
+
+The fields in the base condition are all "anded" together. If you leave the fields out of the request they are ignored in the query. The "day_of_week" field is indexed such that Sunday is 1, Monday is 2, ..., Saturday is 7.
+
+**Composable Conditions**
+
+You can compose the conditions using "and" and "or" as demonstrated below. The query is for shows that occurred in the state of NJ AND occurred on a Sunday OR Saturday
+
+```
+curl -d '{
+    "condition": {
+        "and": {
+            "conditions": [
+                {
+                    "base": {
+                        "state": "NJ"
+                    }
+                },
+                {
+                    "or": {
+                        "conditions": [
+                            {
+                                "base": {
+                                    "day_of_week": 1
+                                }
+                            },
+                            {
+                                "base": {
+                                    "day_of_week": 7
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}' $(docker-machine ip):8080/v1/shows | jq .
+```
+
+If the entity model seems a bit... superfluous, that is because they are auto-generated from proto files using [gRPC Gateway](https://github.com/grpc-ecosystem/grpc-gateway).
+
+Your hands and feet are mangoes, you're gonna be a genius anyway.
 
 Congrats. [You did it!](https://www.youtube.com/watch?v=wxEAyJfIUI4)
 
