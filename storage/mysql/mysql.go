@@ -3,7 +3,6 @@ package mysql
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/jloom6/phishql/internal/db"
@@ -128,9 +127,6 @@ func (s *Store) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]st
 
 func (s *Store) getShows(ctx context.Context, req structs.GetShowsRequest) (map[int]structs.Show, error) {
 	query, args := makeQueryAndArgs(getShowsQuery, req.Condition)
-
-	log.Printf("query: %s\n", query)
-	log.Printf("args: %v", args)
 
 	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
