@@ -46,6 +46,7 @@ func protoToBaseCondition(p *phishqlpb.BaseCondition) structs.BaseCondition {
 		City: p.City,
 		Country: p.Country,
 		State: p.State,
+		Song: p.Song,
 	}
 }
 

@@ -74,4 +74,5 @@ type BaseCondition struct {
 	City string
 	State string
 	Country string
+	Song string
 }

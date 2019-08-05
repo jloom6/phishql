@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/jloom6/phishql/internal/db"
@@ -17,7 +18,19 @@ CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
 CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
-CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE
+	? = ANY (
+		SELECT
+			songs.name
+		FROM
+			sets
+				INNER JOIN set_songs ON sets.id = set_songs.set_id
+					INNER JOIN songs ON set_songs.song_id = songs.id
+		WHERE
+			sets.show_id = shows.id
+	)
+END
 `
 
 	getShowsQuery = `
@@ -116,6 +129,9 @@ func (s *Store) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]st
 func (s *Store) getShows(ctx context.Context, req structs.GetShowsRequest) (map[int]structs.Show, error) {
 	query, args := makeQueryAndArgs(getShowsQuery, req.Condition)
 
+	log.Printf("query: %s\n", query)
+	log.Printf("args: %v", args)
+
 	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
@@ -179,6 +195,7 @@ func makeBaseWhereArgs(bc structs.BaseCondition) []interface{} {
 		bc.City, bc.City,
 		bc.State, bc.State,
 		bc.Country, bc.Country,
+		bc.Song, bc.Song,
 	}
 }
 
