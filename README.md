@@ -4,7 +4,7 @@ I got bored and did this. I have no shame. Yes it is extremely over-engineered. 
 
 Some would ask "Why use gRPC for this?", I ask "Why not?".
 
-Right now the actual query API is pretty bare bones, but I was more interested in learning docker. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time. I think the next thing will be shows where they play certain songs.
+Right now the actual query API is pretty bare bones, but I was more interested in learning docker. I'm new to Docker so cut me some slack if there are very noobish things going on here. I'll continue to add functionality as I find the time.
 
 Expect breaking changes. LOTS OF THEM.
 
@@ -71,7 +71,8 @@ curl -XPOST -d '{
             "day_of_week": 1,
             "city": "East Troy",
             "state": "WI",
-            "country": "USA"
+            "country": "USA",
+            "song": "Ruby Waves"
         }
     }
 }' $(docker-machine ip):8080/v1/shows | jq .
