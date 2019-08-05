@@ -250,7 +250,19 @@ CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
 CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
-CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE
+	? = ANY (
+		SELECT
+			songs.name
+		FROM
+			sets
+				INNER JOIN set_songs ON sets.id = set_songs.set_id
+					INNER JOIN songs ON set_songs.song_id = songs.id
+		WHERE
+			sets.show_id = shows.id
+	)
+END
 ) OR (
 CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
 CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
@@ -258,7 +270,19 @@ CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
 CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
-CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE
+	? = ANY (
+		SELECT
+			songs.name
+		FROM
+			sets
+				INNER JOIN set_songs ON sets.id = set_songs.set_id
+					INNER JOIN songs ON set_songs.song_id = songs.id
+		WHERE
+			sets.show_id = shows.id
+	)
+END
 )) AND (
 CASE WHEN ? = 0 THEN 1=1 ELSE YEAR(shows.date) = ? END AND
 CASE WHEN ? = 0 THEN 1=1 ELSE MONTH(shows.date) = ? END AND
@@ -266,12 +290,24 @@ CASE WHEN ? = 0 THEN 1=1 ELSE DAY(shows.date) = ? END AND
 CASE WHEN ? = 0 THEN 1=1 ELSE DAYOFWEEK(shows.date) = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.city = ? END AND
 CASE WHEN ? = '' THEN 1=1 ELSE venues.state = ? END AND
-CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END
+CASE WHEN ? = '' THEN 1=1 ELSE venues.country = ? END AND
+CASE WHEN ? = '' THEN 1=1 ELSE
+	? = ANY (
+		SELECT
+			songs.name
+		FROM
+			sets
+				INNER JOIN set_songs ON sets.id = set_songs.set_id
+					INNER JOIN songs ON set_songs.song_id = songs.id
+		WHERE
+			sets.show_id = shows.id
+	)
+END
 )`,
 			args: []interface{}{
-				0, 0, 0, 0, 0, 0, 1, 1, "", "", "", "", "", "",
-				0, 0, 0, 0, 0, 0, 7, 7, "", "", "", "", "", "",
-				0, 0, 0, 0, 0, 0, 0, 0, "", "", "NJ", "NJ", "", "",
+				0, 0, 0, 0, 0, 0, 1, 1, "", "", "", "", "", "", "", "",
+				0, 0, 0, 0, 0, 0, 7, 7, "", "", "", "", "", "", "", "",
+				0, 0, 0, 0, 0, 0, 0, 0, "", "", "NJ", "NJ", "", "", "", "",
 			},
 		},
 	}

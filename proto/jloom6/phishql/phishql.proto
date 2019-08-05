@@ -38,6 +38,7 @@ message BaseCondition {
     string city = 5;
     string state = 6;
     string country = 7;
+    string song = 8;
 }
 
 message GetShowsResponse {
