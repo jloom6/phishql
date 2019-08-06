@@ -125,7 +125,7 @@ func TestHandler_GetSongs(t *testing.T) {
 		err error
 	}{
 		{
-			name: "service.GetArtists error",
+			name: "service.GetSongs error",
 			getSongsErr: errors.New(""),
 			err: errors.New(""),
 		},
