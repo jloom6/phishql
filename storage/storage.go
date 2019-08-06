@@ -10,4 +10,5 @@ import (
 
 type Interface interface {
 	GetShows(ctx context.Context, req structs.GetShowsRequest) ([]structs.Show, error)
+	GetArtists(ctx context.Context, req structs.GetArtistsRequest) ([]structs.Artist, error)
 }

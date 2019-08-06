@@ -232,7 +232,6 @@ func TestTourToProto(t *testing.T) {
 	}
 }
 
-
 func TestTagToProto(t *testing.T) {
 	tag := &structs.Tag{
 		ID: 1,
@@ -262,6 +261,62 @@ func TestTagToProto(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(_t *testing.T) {
 			assert.Equal(_t, test.ret, tagToProto(test.tag))
+		})
+	}
+}
+
+func TestMapper_ProtoToGetArtistsRequest(t *testing.T) {
+	tests := []struct{
+		name string
+		req *phishqlpb.GetArtistsRequest
+		ret structs.GetArtistsRequest
+	}{
+		{
+			name: "nil req",
+		},
+		{
+			name: "non-nil req",
+			req: &phishqlpb.GetArtistsRequest{},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.ProtoToGetArtistsRequest(test.req))
+		})
+	}
+}
+
+func TestMapper_ArtistsToProto(t *testing.T) {
+	a := structs.Artist{
+		ID:   9,
+		Name: "Kasvot Växt",
+	}
+
+	p := &phishqlpb.Artist{
+		Id:                   int32(a.ID),
+		Name:                 a.Name,
+	}
+	
+	tests := []struct{
+		name string
+		artists []structs.Artist
+		ret []*phishqlpb.Artist
+	}{
+		{
+			name: "success",
+			artists: []structs.Artist{a},
+			ret: []*phishqlpb.Artist{p},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.ArtistsToProto(test.artists))
 		})
 	}
 }

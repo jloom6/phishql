@@ -7,8 +7,15 @@ import "google/protobuf/timestamp.proto";
 
 service PhishQLService {
     rpc GetShows(GetShowsRequest) returns (GetShowsResponse) {
-        option (google.api.http) = {
+         option (google.api.http) = {
 			post: "/v1/shows"
+			body: "*"
+		};
+    }
+
+    rpc GetArtists(GetArtistsRequest) returns (GetArtistsResponse) {
+        option (google.api.http) = {
+			post: "/v1/artists"
 			body: "*"
 		};
     }
@@ -95,4 +102,11 @@ message Song {
 message Tag {
     int32 id = 1;
     string text = 2;
+}
+
+message GetArtistsRequest {
+}
+
+message GetArtistsResponse {
+    repeated Artist artists = 1;
 }

@@ -34,6 +34,34 @@ func (m *MockInterface) EXPECT() *MockInterfaceMockRecorder {
 	return m.recorder
 }
 
+// ArtistsToProto mocks base method
+func (m *MockInterface) ArtistsToProto(arg0 []structs.Artist) []*phishql.Artist {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ArtistsToProto", arg0)
+	ret0, _ := ret[0].([]*phishql.Artist)
+	return ret0
+}
+
+// ArtistsToProto indicates an expected call of ArtistsToProto
+func (mr *MockInterfaceMockRecorder) ArtistsToProto(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArtistsToProto", reflect.TypeOf((*MockInterface)(nil).ArtistsToProto), arg0)
+}
+
+// ProtoToGetArtistsRequest mocks base method
+func (m *MockInterface) ProtoToGetArtistsRequest(arg0 *phishql.GetArtistsRequest) structs.GetArtistsRequest {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ProtoToGetArtistsRequest", arg0)
+	ret0, _ := ret[0].(structs.GetArtistsRequest)
+	return ret0
+}
+
+// ProtoToGetArtistsRequest indicates an expected call of ProtoToGetArtistsRequest
+func (mr *MockInterfaceMockRecorder) ProtoToGetArtistsRequest(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProtoToGetArtistsRequest", reflect.TypeOf((*MockInterface)(nil).ProtoToGetArtistsRequest), arg0)
+}
+
 // ProtoToGetShowsRequest mocks base method
 func (m *MockInterface) ProtoToGetShowsRequest(arg0 *phishql.GetShowsRequest) structs.GetShowsRequest {
 	m.ctrl.T.Helper()
