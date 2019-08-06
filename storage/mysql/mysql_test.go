@@ -648,7 +648,6 @@ func TestStore_GetArtists(t *testing.T) {
 			mockDB := mocks.NewMockInterface(mockCtrl)
 			mockRows := mocks.NewMockRows(mockCtrl)
 
-			// getShows
 			mockDB.EXPECT().QueryContext(context.Background(), gomock.Any()).Return(mockRows, test.queryErr).Times(1)
 			mockRows.EXPECT().Close().Return(nil).Times(test.rowsCloseTimes)
 			gomock.InOrder(
