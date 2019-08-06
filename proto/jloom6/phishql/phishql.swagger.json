@@ -15,6 +15,32 @@
     "application/json"
   ],
   "paths": {
+    "/v1/artists": {
+      "post": {
+        "operationId": "GetArtists",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/phishqlGetArtistsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phishqlGetArtistsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PhishQLService"
+        ]
+      }
+    },
     "/v1/shows": {
       "post": {
         "operationId": "GetShows",
@@ -109,6 +135,20 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/phishqlCondition"
+          }
+        }
+      }
+    },
+    "phishqlGetArtistsRequest": {
+      "type": "object"
+    },
+    "phishqlGetArtistsResponse": {
+      "type": "object",
+      "properties": {
+        "artists": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlArtist"
           }
         }
       }

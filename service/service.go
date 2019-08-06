@@ -12,6 +12,7 @@ import (
 
 type Interface interface {
 	GetShows(ctx context.Context, req structs.GetShowsRequest) ([]structs.Show, error)
+	GetArtists(ctx context.Context, req structs.GetArtistsRequest) ([]structs.Artist, error)
 }
 
 type Service struct {
@@ -35,4 +36,8 @@ func (s *Service) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]
 	sort.Slice(shows, func(i, j int) bool { return shows[i].Date.Before(shows[j].Date) })
 
 	return shows, nil
+}
+
+func (s *Service) GetArtists(ctx context.Context, req structs.GetArtistsRequest) ([]structs.Artist, error) {
+	return s.store.GetArtists(ctx, req)
 }

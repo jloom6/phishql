@@ -41,3 +41,16 @@ func (h *Handler) GetShows(ctx context.Context, req *phishqlpb.GetShowsRequest) 
 
 	return &phishqlpb.GetShowsResponse{Shows: ps}, nil
 }
+
+func (h *Handler) GetArtists(ctx context.Context, req *phishqlpb.GetArtistsRequest) (*phishqlpb.GetArtistsResponse, error) {
+	log.Printf("%v", req)
+
+	artists, err := h.service.GetArtists(ctx, h.mapper.ProtoToGetArtistsRequest(req))
+	if err != nil {
+		return nil, err
+	}
+
+	return &phishqlpb.GetArtistsResponse{
+		Artists: h.mapper.ArtistsToProto(artists),
+	}, nil
+}

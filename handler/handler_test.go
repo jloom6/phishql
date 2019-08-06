@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang/mock/gomock"
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"
+	"github.com/jloom6/phishql/mapper"
 	mmocks "github.com/jloom6/phishql/mapper/mocks"
 	smocks "github.com/jloom6/phishql/service/mocks"
 	"github.com/jloom6/phishql/structs"
@@ -64,6 +65,49 @@ func TestHandler_GetShows(t *testing.T) {
 			mockMapper.EXPECT().ShowsToProto([]structs.Show{}).Return(test.showsToProtoRet, test.showsToProtoErr).Times(test.showsToProtoTimes)
 
 			ret, err := h.GetShows(context.Background(), &phishqlpb.GetShowsRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}
+
+func TestHandler_GetArtists(t *testing.T) {
+	tests := []struct{
+		name string
+		getArtistsRet []structs.Artist
+		getArtistsErr error
+		req *phishqlpb.GetArtistsRequest
+		ret *phishqlpb.GetArtistsResponse
+		err error
+	}{
+		{
+			name: "service.GetArtists error",
+			getArtistsErr: errors.New(""),
+			err: errors.New(""),
+		},
+		{
+			name: "success",
+			getArtistsRet: []structs.Artist{},
+			ret: &phishqlpb.GetArtistsResponse{Artists:[]*phishqlpb.Artist{}},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockService := smocks.NewMockInterface(mockCtrl)
+
+			h := New(Params{
+				Service: mockService,
+				Mapper: mapper.New(),
+			})
+
+			mockService.EXPECT().GetArtists(context.Background(), structs.GetArtistsRequest{}).Return(test.getArtistsRet, test.getArtistsErr).Times(1)
+
+			ret, err := h.GetArtists(context.Background(), &phishqlpb.GetArtistsRequest{})
 
 			assert.Equal(_t, test.ret, ret)
 			assert.Equal(_t, test.err, err)

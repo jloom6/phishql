@@ -76,3 +76,6 @@ type BaseCondition struct {
 	Country string
 	Song string
 }
+
+type GetArtistsRequest struct {
+}

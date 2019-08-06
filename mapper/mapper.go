@@ -10,7 +10,9 @@ import (
 
 type Interface interface {
 	ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.GetShowsRequest
+	ProtoToGetArtistsRequest(p *phishqlpb.GetArtistsRequest) structs.GetArtistsRequest
 	ShowsToProto(shows []structs.Show) ([]*phishqlpb.Show, error)
+	ArtistsToProto(as []structs.Artist) []*phishqlpb.Artist
 }
 
 type Mapper struct {}
@@ -178,4 +180,18 @@ func tagToProto(t *structs.Tag) *phishqlpb.Tag {
 		Id: int32(t.ID),
 		Text: t.Text,
 	}
+}
+
+func (m *Mapper) ProtoToGetArtistsRequest(p *phishqlpb.GetArtistsRequest) structs.GetArtistsRequest {
+	return structs.GetArtistsRequest{}
+}
+
+func (m *Mapper) ArtistsToProto(as []structs.Artist) []*phishqlpb.Artist {
+	ps := make([]*phishqlpb.Artist, 0, len(as))
+
+	for _, a := range as {
+		ps = append(ps, artistToProto(a))
+	}
+
+	return ps
 }
