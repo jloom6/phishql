@@ -114,3 +114,46 @@ func TestHandler_GetArtists(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_GetSongs(t *testing.T) {
+	tests := []struct{
+		name string
+		getSongsRet []structs.Song
+		getSongsErr error
+		req *phishqlpb.GetSongsRequest
+		ret *phishqlpb.GetSongsResponse
+		err error
+	}{
+		{
+			name: "service.GetSongs error",
+			getSongsErr: errors.New(""),
+			err: errors.New(""),
+		},
+		{
+			name: "success",
+			getSongsRet: []structs.Song{},
+			ret: &phishqlpb.GetSongsResponse{Songs:[]*phishqlpb.Song{}},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockService := smocks.NewMockInterface(mockCtrl)
+
+			h := New(Params{
+				Service: mockService,
+				Mapper: mapper.New(),
+			})
+
+			mockService.EXPECT().GetSongs(context.Background(), structs.GetSongsRequest{}).Return(test.getSongsRet, test.getSongsErr).Times(1)
+
+			ret, err := h.GetSongs(context.Background(), &phishqlpb.GetSongsRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}

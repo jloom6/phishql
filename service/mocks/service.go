@@ -63,3 +63,18 @@ func (mr *MockInterfaceMockRecorder) GetShows(arg0, arg1 interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShows", reflect.TypeOf((*MockInterface)(nil).GetShows), arg0, arg1)
 }
+
+// GetSongs mocks base method
+func (m *MockInterface) GetSongs(arg0 context.Context, arg1 structs.GetSongsRequest) ([]structs.Song, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSongs", arg0, arg1)
+	ret0, _ := ret[0].([]structs.Song)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSongs indicates an expected call of GetSongs
+func (mr *MockInterfaceMockRecorder) GetSongs(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSongs", reflect.TypeOf((*MockInterface)(nil).GetSongs), arg0, arg1)
+}

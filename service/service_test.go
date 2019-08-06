@@ -94,3 +94,40 @@ func TestService_GetArtists(t *testing.T) {
 	}
 }
 
+func TestService_GetSongs(t *testing.T) {
+	tests := []struct{
+		name string
+		getSongsRet []structs.Song
+		getSongsErr error
+		req structs.GetSongsRequest
+		ret []structs.Song
+		err error
+	}{
+		{
+			name: "success",
+			getSongsRet: []structs.Song{},
+			req: structs.GetSongsRequest{},
+			ret: []structs.Song{},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockStore := mocks.NewMockInterface(mockCtrl)
+
+			s := New(Params{
+				Store:mockStore,
+			})
+
+			mockStore.EXPECT().GetSongs(context.Background(), structs.GetSongsRequest{}).Return(test.getSongsRet, test.getSongsErr).Times(1)
+
+			ret, err := s.GetSongs(context.Background(), structs.GetSongsRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}

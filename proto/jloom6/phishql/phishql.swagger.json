@@ -66,6 +66,32 @@
           "PhishQLService"
         ]
       }
+    },
+    "/v1/songs": {
+      "post": {
+        "operationId": "GetSongs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/phishqlGetSongsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phishqlGetSongsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PhishQLService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -168,6 +194,20 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/phishqlShow"
+          }
+        }
+      }
+    },
+    "phishqlGetSongsRequest": {
+      "type": "object"
+    },
+    "phishqlGetSongsResponse": {
+      "type": "object",
+      "properties": {
+        "songs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlSong"
           }
         }
       }

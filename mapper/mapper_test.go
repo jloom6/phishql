@@ -320,3 +320,60 @@ func TestMapper_ArtistsToProto(t *testing.T) {
 		})
 	}
 }
+
+func TestMapper_ProtoToGetSongsRequest(t *testing.T) {
+	tests := []struct{
+		name string
+		req *phishqlpb.GetSongsRequest
+		ret structs.GetSongsRequest
+	}{
+		{
+			name: "nil req",
+		},
+		{
+			name: "non-nil req",
+			req: &phishqlpb.GetSongsRequest{},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.ProtoToGetSongsRequest(test.req))
+		})
+	}
+}
+
+func TestMapper_SongsToProto(t *testing.T) {
+	s := structs.Song{
+		ID:   555,
+		Name: "555",
+	}
+
+	p := &phishqlpb.Song{
+		Id:                   int32(s.ID),
+		Name:                 s.Name,
+	}
+
+	tests := []struct{
+		name string
+		songs []structs.Song
+		ret []*phishqlpb.Song
+	}{
+		{
+			name: "success",
+			songs: []structs.Song{s},
+			ret: []*phishqlpb.Song{p},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.SongsToProto(test.songs))
+		})
+	}
+}
+

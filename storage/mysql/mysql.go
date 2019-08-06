@@ -31,7 +31,6 @@ CASE WHEN ? = '' THEN 1=1 ELSE
 	)
 END
 `
-
 	getShowsQuery = `
 SELECT
 	shows.id show_id,
@@ -69,7 +68,7 @@ FROM
 WHERE
 	%s
 `
-	getSongsQuery = `
+	getSetSongsQuery = `
 SELECT
 	sets.show_id show_id,
 	sets.order set_order,
@@ -92,13 +91,21 @@ ORDER BY
 	sets.order,
 	set_songs.order
 `
-
 	getArtistsQuery = `
 SELECT
 	id,
 	name
 FROM
 	artists
+ORDER BY
+	name
+`
+	getSongsQuery = `
+SELECT
+	id,
+	name
+FROM
+	songs
 ORDER BY
 	name
 `
@@ -277,7 +284,7 @@ func makeSets(rows db.Rows) (map[int]map[int]structs.Set, error) {
 }
 
 func (s *Store) getSongs(ctx context.Context, req structs.GetShowsRequest) (map[int]map[int][]structs.SetSong, error) {
-	query, args := makeQueryAndArgs(getSongsQuery, req.Condition)
+	query, args := makeQueryAndArgs(getSetSongsQuery, req.Condition)
 
 	rows, err := s.db.QueryContext(ctx, query, args...)
 	if err != nil {
@@ -286,10 +293,10 @@ func (s *Store) getSongs(ctx context.Context, req structs.GetShowsRequest) (map[
 
 	defer closeRows(rows)
 
-	return makeSongs(rows)
+	return makeSetSongs(rows)
 }
 
-func makeSongs(rows db.Rows) (map[int]map[int][]structs.SetSong, error) {
+func makeSetSongs(rows db.Rows) (map[int]map[int][]structs.SetSong, error) {
 	songs := map[int]map[int][]structs.SetSong{}
 
 	for rows.Next() {
@@ -405,3 +412,41 @@ func makeArtist(row db.Rows) (structs.Artist, error) {
 
 	return a, nil
 }
+
+func (s *Store) GetSongs(ctx context.Context, _ structs.GetSongsRequest) ([]structs.Song, error) {
+	rows, err := s.db.QueryContext(ctx, getSongsQuery)
+	if err != nil {
+		return nil, err
+	}
+
+	defer closeRows(rows)
+
+	return makeSongs(rows)
+}
+
+func makeSongs(rows db.Rows) ([]structs.Song, error) {
+	ss := make([]structs.Song, 0)
+
+	for rows.Next() {
+		s, err := makeSong(rows)
+		if err != nil {
+			return nil, err
+		}
+
+		ss = append(ss, s)
+	}
+
+	return ss, nil
+}
+
+func makeSong(row db.Rows) (structs.Song, error) {
+	var s structs.Song
+
+	err := row.Scan(&s.ID, &s.Name)
+	if err != nil {
+		return structs.Song{}, err
+	}
+
+	return s, nil
+}
+

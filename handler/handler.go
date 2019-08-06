@@ -54,3 +54,17 @@ func (h *Handler) GetArtists(ctx context.Context, req *phishqlpb.GetArtistsReque
 		Artists: h.mapper.ArtistsToProto(artists),
 	}, nil
 }
+
+func (h *Handler) GetSongs(ctx context.Context, req *phishqlpb.GetSongsRequest) (*phishqlpb.GetSongsResponse, error) {
+	log.Printf("%v", req)
+
+	songs, err := h.service.GetSongs(ctx, h.mapper.ProtoToGetSongsRequest(req))
+	if err != nil {
+		return nil, err
+	}
+
+	return &phishqlpb.GetSongsResponse{
+		Songs: h.mapper.SongsToProto(songs),
+	}, nil
+}
+

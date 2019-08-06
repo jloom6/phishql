@@ -19,6 +19,13 @@ service PhishQLService {
 			body: "*"
 		};
     }
+
+    rpc GetSongs(GetSongsRequest) returns (GetSongsResponse) {
+        option (google.api.http) = {
+			post: "/v1/songs"
+			body: "*"
+		};
+    }
 }
 
 message GetShowsRequest {
@@ -110,3 +117,11 @@ message GetArtistsRequest {
 message GetArtistsResponse {
     repeated Artist artists = 1;
 }
+
+message GetSongsRequest {
+}
+
+message GetSongsResponse {
+    repeated Song songs = 1;
+}
+
