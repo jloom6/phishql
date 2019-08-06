@@ -13,6 +13,7 @@ import (
 type Interface interface {
 	GetShows(ctx context.Context, req structs.GetShowsRequest) ([]structs.Show, error)
 	GetArtists(ctx context.Context, req structs.GetArtistsRequest) ([]structs.Artist, error)
+	GetSongs(ctx context.Context, req structs.GetSongsRequest) ([]structs.Song, error)
 }
 
 type Service struct {
@@ -40,4 +41,8 @@ func (s *Service) GetShows(ctx context.Context, req structs.GetShowsRequest) ([]
 
 func (s *Service) GetArtists(ctx context.Context, req structs.GetArtistsRequest) ([]structs.Artist, error) {
 	return s.store.GetArtists(ctx, req)
+}
+
+func (s *Service) GetSongs(ctx context.Context, req structs.GetSongsRequest) ([]structs.Song, error) {
+	return s.store.GetSongs(ctx, req)
 }

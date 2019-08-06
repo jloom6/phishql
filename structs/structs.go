@@ -79,3 +79,6 @@ type BaseCondition struct {
 
 type GetArtistsRequest struct {
 }
+
+type GetSongsRequest struct {
+}
