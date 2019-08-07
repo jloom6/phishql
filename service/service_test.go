@@ -199,3 +199,39 @@ func TestService_GetTours(t *testing.T) {
 		})
 	}
 }
+
+func TestService_GetVenues(t *testing.T) {
+	tests := []struct{
+		name string
+		getVenuesRet []structs.Venue
+		getVenuesErr error
+		ret []structs.Venue
+		err error
+	}{
+		{
+			name: "success",
+			getVenuesRet: []structs.Venue{},
+			ret: []structs.Venue{},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockStore := mocks.NewMockInterface(mockCtrl)
+
+			s := New(Params{
+				Store:mockStore,
+			})
+
+			mockStore.EXPECT().GetVenues(context.Background(), structs.GetVenuesRequest{}).Return(test.getVenuesRet, test.getVenuesErr).Times(1)
+
+			ret, err := s.GetVenues(context.Background(), structs.GetVenuesRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}

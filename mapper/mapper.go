@@ -14,11 +14,13 @@ type Interface interface {
 	ProtoToGetSongsRequest(p *phishqlpb.GetSongsRequest) structs.GetSongsRequest
 	ProtoToGetTagsRequest(p *phishqlpb.GetTagsRequest) structs.GetTagsRequest
 	ProtoToGetToursRequest(p *phishqlpb.GetToursRequest) structs.GetToursRequest
+	ProtoToGetVenuesRequest(p *phishqlpb.GetVenuesRequest) structs.GetVenuesRequest
 	ShowsToProto(shows []structs.Show) ([]*phishqlpb.Show, error)
 	ArtistsToProto(as []structs.Artist) []*phishqlpb.Artist
 	SongsToProto(ss []structs.Song) []*phishqlpb.Song
 	TagsToProto(ts []structs.Tag) []*phishqlpb.Tag
 	ToursToProto(ts []structs.Tour) []*phishqlpb.Tour
+	VenuesToProto(vs []structs.Venue) []*phishqlpb.Venue
 }
 
 type Mapper struct {}
@@ -239,6 +241,20 @@ func (m *Mapper) ToursToProto(ts []structs.Tour) []*phishqlpb.Tour {
 
 	for _, t := range ts {
 		ps = append(ps, tourToProto(&t))
+	}
+
+	return ps
+}
+
+func (m *Mapper) ProtoToGetVenuesRequest(p *phishqlpb.GetVenuesRequest) structs.GetVenuesRequest {
+	return structs.GetVenuesRequest{}
+}
+
+func (m *Mapper) VenuesToProto(vs []structs.Venue) []*phishqlpb.Venue {
+	ps := make([]*phishqlpb.Venue, 0, len(vs))
+
+	for _, v := range vs {
+		ps = append(ps, venueToProto(v))
 	}
 
 	return ps

@@ -93,3 +93,16 @@ func (h *Handler) GetTours(ctx context.Context, req *phishqlpb.GetToursRequest) 
 		Tours: h.mapper.ToursToProto(tours),
 	}, nil
 }
+
+func (h *Handler) GetVenues(ctx context.Context, req *phishqlpb.GetVenuesRequest) (*phishqlpb.GetVenuesResponse, error) {
+	log.Printf("%v", req)
+
+	venues, err := h.service.GetVenues(ctx, h.mapper.ProtoToGetVenuesRequest(req))
+	if err != nil {
+		return nil, err
+	}
+
+	return &phishqlpb.GetVenuesResponse{
+		Venues: h.mapper.VenuesToProto(venues),
+	}, nil
+}

@@ -144,6 +144,32 @@
           "PhishQLService"
         ]
       }
+    },
+    "/v1/venues": {
+      "post": {
+        "operationId": "GetVenues",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/phishqlGetVenuesResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phishqlGetVenuesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PhishQLService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -288,6 +314,20 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/phishqlTour"
+          }
+        }
+      }
+    },
+    "phishqlGetVenuesRequest": {
+      "type": "object"
+    },
+    "phishqlGetVenuesResponse": {
+      "type": "object",
+      "properties": {
+        "venues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlVenue"
           }
         }
       }

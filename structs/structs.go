@@ -88,3 +88,6 @@ type GetTagsRequest struct {
 
 type GetToursRequest struct {
 }
+
+type GetVenuesRequest struct {
+}
