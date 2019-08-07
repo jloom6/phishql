@@ -72,3 +72,12 @@ run-hard:
 	make clean
 	make build
 	make run-all
+
+.PHONY: fmt
+fmt:
+	go fmt ./...
+
+.PHONY: lint
+lint:
+	make fmt
+	golint ./... | grep -v vendor/ || :

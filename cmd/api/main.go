@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	port = ":9090"
+	port     = ":9090"
 	dbDriver = "mysql"
 )
 
@@ -45,7 +45,7 @@ func main() {
 	svc := service.New(service.Params{Store: store})
 	h := handler.New(handler.Params{
 		Service: svc,
-		Mapper: mapper.New(),
+		Mapper:  mapper.New(),
 	})
 
 	lis, err := net.Listen("tcp", port)

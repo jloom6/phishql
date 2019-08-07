@@ -9,23 +9,27 @@ import (
 	"github.com/jloom6/phishql/service"
 )
 
+// Handler implements the PhishQL gRPC server interface
 type Handler struct {
 	service service.Interface
-	mapper mapper.Interface
+	mapper  mapper.Interface
 }
 
+// Params contains the parameters needed to construct a new Handler
 type Params struct {
 	Service service.Interface
-	Mapper mapper.Interface
+	Mapper  mapper.Interface
 }
 
+// New constructs a mew Handler
 func New(p Params) *Handler {
 	return &Handler{
 		service: p.Service,
-		mapper: p.Mapper,
+		mapper:  p.Mapper,
 	}
 }
 
+// GetShows gets the shows that meet the conditions from the request
 func (h *Handler) GetShows(ctx context.Context, req *phishqlpb.GetShowsRequest) (*phishqlpb.GetShowsResponse, error) {
 	log.Printf("%v", req)
 
@@ -42,6 +46,7 @@ func (h *Handler) GetShows(ctx context.Context, req *phishqlpb.GetShowsRequest) 
 	return &phishqlpb.GetShowsResponse{Shows: ps}, nil
 }
 
+// GetArtists gets the artists that meet the conditions from the request
 func (h *Handler) GetArtists(ctx context.Context, req *phishqlpb.GetArtistsRequest) (*phishqlpb.GetArtistsResponse, error) {
 	log.Printf("%v", req)
 
@@ -55,6 +60,7 @@ func (h *Handler) GetArtists(ctx context.Context, req *phishqlpb.GetArtistsReque
 	}, nil
 }
 
+// GetSongs gets the songs that meet the conditions from the request
 func (h *Handler) GetSongs(ctx context.Context, req *phishqlpb.GetSongsRequest) (*phishqlpb.GetSongsResponse, error) {
 	log.Printf("%v", req)
 
@@ -68,6 +74,7 @@ func (h *Handler) GetSongs(ctx context.Context, req *phishqlpb.GetSongsRequest) 
 	}, nil
 }
 
+// GetTags gets the tags that meet the conditions from the request
 func (h *Handler) GetTags(ctx context.Context, req *phishqlpb.GetTagsRequest) (*phishqlpb.GetTagsResponse, error) {
 	log.Printf("%v", req)
 
@@ -81,6 +88,7 @@ func (h *Handler) GetTags(ctx context.Context, req *phishqlpb.GetTagsRequest) (*
 	}, nil
 }
 
+// GetTours gets the tours that meet the conditions from the request
 func (h *Handler) GetTours(ctx context.Context, req *phishqlpb.GetToursRequest) (*phishqlpb.GetToursResponse, error) {
 	log.Printf("%v", req)
 
@@ -94,6 +102,7 @@ func (h *Handler) GetTours(ctx context.Context, req *phishqlpb.GetToursRequest) 
 	}, nil
 }
 
+// GetVenues gets the venues that meet the conditions from the request
 func (h *Handler) GetVenues(ctx context.Context, req *phishqlpb.GetVenuesRequest) (*phishqlpb.GetVenuesResponse, error) {
 	log.Printf("%v", req)
 
