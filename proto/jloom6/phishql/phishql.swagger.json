@@ -92,6 +92,32 @@
           "PhishQLService"
         ]
       }
+    },
+    "/v1/tags": {
+      "post": {
+        "operationId": "GetTags",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/phishqlGetTagsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phishqlGetTagsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PhishQLService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -208,6 +234,20 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/phishqlSong"
+          }
+        }
+      }
+    },
+    "phishqlGetTagsRequest": {
+      "type": "object"
+    },
+    "phishqlGetTagsResponse": {
+      "type": "object",
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlTag"
           }
         }
       }

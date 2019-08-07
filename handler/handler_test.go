@@ -157,3 +157,46 @@ func TestHandler_GetSongs(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_GetTags(t *testing.T) {
+	tests := []struct{
+		name string
+		getTagsRet []structs.Tag
+		getTagsErr error
+		req *phishqlpb.GetTagsRequest
+		ret *phishqlpb.GetTagsResponse
+		err error
+	}{
+		{
+			name: "service.GetSongs error",
+			getTagsErr: errors.New(""),
+			err: errors.New(""),
+		},
+		{
+			name: "success",
+			getTagsRet: []structs.Tag{},
+			ret: &phishqlpb.GetTagsResponse{Tags:[]*phishqlpb.Tag{}},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockService := smocks.NewMockInterface(mockCtrl)
+
+			h := New(Params{
+				Service: mockService,
+				Mapper: mapper.New(),
+			})
+
+			mockService.EXPECT().GetTags(context.Background(), structs.GetTagsRequest{}).Return(test.getTagsRet, test.getTagsErr).Times(1)
+
+			ret, err := h.GetTags(context.Background(), &phishqlpb.GetTagsRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}

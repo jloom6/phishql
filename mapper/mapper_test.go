@@ -377,3 +377,58 @@ func TestMapper_SongsToProto(t *testing.T) {
 	}
 }
 
+func TestMapper_ProtoToGetTagsRequest(t *testing.T) {
+	tests := []struct{
+		name string
+		req *phishqlpb.GetTagsRequest
+		ret structs.GetTagsRequest
+	}{
+		{
+			name: "nil req",
+		},
+		{
+			name: "non-nil req",
+			req: &phishqlpb.GetTagsRequest{},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.ProtoToGetTagsRequest(test.req))
+		})
+	}
+}
+
+func TestMapper_TagsToProto(t *testing.T) {
+	tag := structs.Tag{
+		ID:   1,
+		Text: "Trey on marimba lumina.",
+	}
+
+	p := &phishqlpb.Tag{
+		Id:                   int32(tag.ID),
+		Text:                 tag.Text,
+	}
+
+	tests := []struct{
+		name string
+		tags []structs.Tag
+		ret []*phishqlpb.Tag
+	}{
+		{
+			name: "success",
+			tags: []structs.Tag{tag},
+			ret: []*phishqlpb.Tag{p},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.TagsToProto(test.tags))
+		})
+	}
+}

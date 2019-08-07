@@ -12,4 +12,5 @@ type Interface interface {
 	GetShows(ctx context.Context, req structs.GetShowsRequest) ([]structs.Show, error)
 	GetArtists(ctx context.Context, req structs.GetArtistsRequest) ([]structs.Artist, error)
 	GetSongs(ctx context.Context, req structs.GetSongsRequest) ([]structs.Song, error)
+	GetTags(ctx context.Context, req structs.GetTagsRequest) ([]structs.Tag, error)
 }

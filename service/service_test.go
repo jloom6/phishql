@@ -61,14 +61,12 @@ func TestService_GetArtists(t *testing.T) {
 		name string
 		getArtistsRet []structs.Artist
 		getArtistErr error
-		req structs.GetArtistsRequest
 		ret []structs.Artist
 		err error
 	}{
 		{
 			name: "success",
 			getArtistsRet: []structs.Artist{},
-			req: structs.GetArtistsRequest{},
 			ret: []structs.Artist{},
 		},
 	}
@@ -99,14 +97,12 @@ func TestService_GetSongs(t *testing.T) {
 		name string
 		getSongsRet []structs.Song
 		getSongsErr error
-		req structs.GetSongsRequest
 		ret []structs.Song
 		err error
 	}{
 		{
 			name: "success",
 			getSongsRet: []structs.Song{},
-			req: structs.GetSongsRequest{},
 			ret: []structs.Song{},
 		},
 	}
@@ -125,6 +121,42 @@ func TestService_GetSongs(t *testing.T) {
 			mockStore.EXPECT().GetSongs(context.Background(), structs.GetSongsRequest{}).Return(test.getSongsRet, test.getSongsErr).Times(1)
 
 			ret, err := s.GetSongs(context.Background(), structs.GetSongsRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}
+
+func TestService_GetTags(t *testing.T) {
+	tests := []struct{
+		name string
+		getTagsRet []structs.Tag
+		getTagsErr error
+		ret []structs.Tag
+		err error
+	}{
+		{
+			name: "success",
+			getTagsRet: []structs.Tag{},
+			ret: []structs.Tag{},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockStore := mocks.NewMockInterface(mockCtrl)
+
+			s := New(Params{
+				Store:mockStore,
+			})
+
+			mockStore.EXPECT().GetTags(context.Background(), structs.GetTagsRequest{}).Return(test.getTagsRet, test.getTagsErr).Times(1)
+
+			ret, err := s.GetTags(context.Background(), structs.GetTagsRequest{})
 
 			assert.Equal(_t, test.ret, ret)
 			assert.Equal(_t, test.err, err)

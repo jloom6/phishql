@@ -68,3 +68,15 @@ func (h *Handler) GetSongs(ctx context.Context, req *phishqlpb.GetSongsRequest) 
 	}, nil
 }
 
+func (h *Handler) GetTags(ctx context.Context, req *phishqlpb.GetTagsRequest) (*phishqlpb.GetTagsResponse, error) {
+	log.Printf("%v", req)
+
+	tags, err := h.service.GetTags(ctx, h.mapper.ProtoToGetTagsRequest(req))
+	if err != nil {
+		return nil, err
+	}
+
+	return &phishqlpb.GetTagsResponse{
+		Tags: h.mapper.TagsToProto(tags),
+	}, nil
+}
