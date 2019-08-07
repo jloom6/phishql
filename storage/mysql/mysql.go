@@ -118,6 +118,18 @@ FROM
 ORDER BY
 	text
 `
+	// Go doesn't like backticks in string literals
+	getToursQuery = `
+SELECT
+	id,
+	name,
+` +
+	"`desc`\n" + `
+FROM
+	tours
+ORDER BY
+	name
+`
 )
 
 type Store struct {
@@ -491,6 +503,43 @@ func makeTag(row db.Rows) (structs.Tag, error) {
 	err := row.Scan(&t.ID, &t.Text)
 	if err != nil {
 		return structs.Tag{}, err
+	}
+
+	return t, nil
+}
+
+func (s *Store) GetTours(ctx context.Context, _ structs.GetToursRequest) ([]structs.Tour, error) {
+	rows, err := s.db.QueryContext(ctx, getToursQuery)
+	if err != nil {
+		return nil, err
+	}
+
+	defer closeRows(rows)
+
+	return makeTours(rows)
+}
+
+func makeTours(rows db.Rows) ([]structs.Tour, error) {
+	ts := make([]structs.Tour, 0)
+
+	for rows.Next() {
+		t, err := makeTour(rows)
+		if err != nil {
+			return nil, err
+		}
+
+		ts = append(ts, t)
+	}
+
+	return ts, nil
+}
+
+func makeTour(row db.Rows) (structs.Tour, error) {
+	var t structs.Tour
+
+	err := row.Scan(&t.ID, &t.Name, &t.Description)
+	if err != nil {
+		return structs.Tour{}, err
 	}
 
 	return t, nil

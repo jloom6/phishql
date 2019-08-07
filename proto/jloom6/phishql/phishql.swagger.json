@@ -118,6 +118,32 @@
           "PhishQLService"
         ]
       }
+    },
+    "/v1/tours": {
+      "post": {
+        "operationId": "GetTours",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/phishqlGetToursResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/phishqlGetToursRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PhishQLService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -248,6 +274,20 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/phishqlTag"
+          }
+        }
+      }
+    },
+    "phishqlGetToursRequest": {
+      "type": "object"
+    },
+    "phishqlGetToursResponse": {
+      "type": "object",
+      "properties": {
+        "tours": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/phishqlTour"
           }
         }
       }

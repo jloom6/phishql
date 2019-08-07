@@ -200,3 +200,46 @@ func TestHandler_GetTags(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_GetTours(t *testing.T) {
+	tests := []struct{
+		name string
+		getToursRet []structs.Tour
+		getToursErr error
+		req *phishqlpb.GetToursRequest
+		ret *phishqlpb.GetToursResponse
+		err error
+	}{
+		{
+			name: "service.GetTours error",
+			getToursErr: errors.New(""),
+			err: errors.New(""),
+		},
+		{
+			name: "success",
+			getToursRet: []structs.Tour{},
+			ret: &phishqlpb.GetToursResponse{Tours:[]*phishqlpb.Tour{}},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockService := smocks.NewMockInterface(mockCtrl)
+
+			h := New(Params{
+				Service: mockService,
+				Mapper: mapper.New(),
+			})
+
+			mockService.EXPECT().GetTours(context.Background(), structs.GetToursRequest{}).Return(test.getToursRet, test.getToursErr).Times(1)
+
+			ret, err := h.GetTours(context.Background(), &phishqlpb.GetToursRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}
