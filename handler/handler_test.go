@@ -168,7 +168,7 @@ func TestHandler_GetTags(t *testing.T) {
 		err error
 	}{
 		{
-			name: "service.GetSongs error",
+			name: "service.GetTags error",
 			getTagsErr: errors.New(""),
 			err: errors.New(""),
 		},

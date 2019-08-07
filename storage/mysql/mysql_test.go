@@ -973,4 +973,3 @@ func TestMakeTags(t *testing.T) {
 		})
 	}
 }
-
