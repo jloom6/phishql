@@ -163,3 +163,39 @@ func TestService_GetTags(t *testing.T) {
 		})
 	}
 }
+
+func TestService_GetTours(t *testing.T) {
+	tests := []struct{
+		name string
+		getToursRet []structs.Tour
+		getToursErr error
+		ret []structs.Tour
+		err error
+	}{
+		{
+			name: "success",
+			getToursRet: []structs.Tour{},
+			ret: []structs.Tour{},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockStore := mocks.NewMockInterface(mockCtrl)
+
+			s := New(Params{
+				Store:mockStore,
+			})
+
+			mockStore.EXPECT().GetTours(context.Background(), structs.GetToursRequest{}).Return(test.getToursRet, test.getToursErr).Times(1)
+
+			ret, err := s.GetTours(context.Background(), structs.GetToursRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}

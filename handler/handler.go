@@ -80,3 +80,16 @@ func (h *Handler) GetTags(ctx context.Context, req *phishqlpb.GetTagsRequest) (*
 		Tags: h.mapper.TagsToProto(tags),
 	}, nil
 }
+
+func (h *Handler) GetTours(ctx context.Context, req *phishqlpb.GetToursRequest) (*phishqlpb.GetToursResponse, error) {
+	log.Printf("%v", req)
+
+	tours, err := h.service.GetTours(ctx, h.mapper.ProtoToGetToursRequest(req))
+	if err != nil {
+		return nil, err
+	}
+
+	return &phishqlpb.GetToursResponse{
+		Tours: h.mapper.ToursToProto(tours),
+	}, nil
+}

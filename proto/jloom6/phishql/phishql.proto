@@ -33,6 +33,13 @@ service PhishQLService {
 			body: "*"
 		};
     }
+
+    rpc GetTours(GetToursRequest) returns (GetToursResponse) {
+        option (google.api.http) = {
+			post: "/v1/tours"
+			body: "*"
+		};
+    }
 }
 
 message GetShowsRequest {
@@ -137,4 +144,11 @@ message GetTagsRequest {
 
 message GetTagsResponse {
     repeated Tag tags = 1;
+}
+
+message GetToursRequest {
+}
+
+message GetToursResponse {
+    repeated Tour tours = 1;
 }

@@ -432,3 +432,61 @@ func TestMapper_TagsToProto(t *testing.T) {
 		})
 	}
 }
+
+func TestMapper_ProtoToGetToursRequest(t *testing.T) {
+	tests := []struct{
+		name string
+		req *phishqlpb.GetToursRequest
+		ret structs.GetToursRequest
+	}{
+		{
+			name: "nil req",
+		},
+		{
+			name: "non-nil req",
+			req: &phishqlpb.GetToursRequest{},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.ProtoToGetToursRequest(test.req))
+		})
+	}
+}
+
+func TestMapper_ToursToProto(t *testing.T) {
+	tour := structs.Tour{
+		ID:   1,
+		Name: "2015 Summer Tour",
+		Description: "The end of set spelling at Dick's",
+	}
+
+	p := &phishqlpb.Tour{
+		Id:                   int32(tour.ID),
+		Name:                 tour.Name,
+		Description: tour.Description,
+	}
+
+	tests := []struct{
+		name string
+		tours []structs.Tour
+		ret []*phishqlpb.Tour
+	}{
+		{
+			name: "success",
+			tours: []structs.Tour{tour},
+			ret: []*phishqlpb.Tour{p},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.ToursToProto(test.tours))
+		})
+	}
+}

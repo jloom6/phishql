@@ -93,3 +93,18 @@ func (mr *MockInterfaceMockRecorder) GetTags(arg0, arg1 interface{}) *gomock.Cal
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTags", reflect.TypeOf((*MockInterface)(nil).GetTags), arg0, arg1)
 }
+
+// GetTours mocks base method
+func (m *MockInterface) GetTours(arg0 context.Context, arg1 structs.GetToursRequest) ([]structs.Tour, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTours", arg0, arg1)
+	ret0, _ := ret[0].([]structs.Tour)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTours indicates an expected call of GetTours
+func (mr *MockInterfaceMockRecorder) GetTours(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTours", reflect.TypeOf((*MockInterface)(nil).GetTours), arg0, arg1)
+}
