@@ -14,4 +14,5 @@ type Interface interface {
 	GetSongs(ctx context.Context, req structs.GetSongsRequest) ([]structs.Song, error)
 	GetTags(ctx context.Context, req structs.GetTagsRequest) ([]structs.Tag, error)
 	GetTours(ctx context.Context, req structs.GetToursRequest) ([]structs.Tour, error)
+	GetVenues(ctx context.Context, req structs.GetVenuesRequest) ([]structs.Venue, error)
 }

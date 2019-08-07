@@ -108,3 +108,18 @@ func (mr *MockInterfaceMockRecorder) GetTours(arg0, arg1 interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTours", reflect.TypeOf((*MockInterface)(nil).GetTours), arg0, arg1)
 }
+
+// GetVenues mocks base method
+func (m *MockInterface) GetVenues(arg0 context.Context, arg1 structs.GetVenuesRequest) ([]structs.Venue, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetVenues", arg0, arg1)
+	ret0, _ := ret[0].([]structs.Venue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetVenues indicates an expected call of GetVenues
+func (mr *MockInterfaceMockRecorder) GetVenues(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetVenues", reflect.TypeOf((*MockInterface)(nil).GetVenues), arg0, arg1)
+}

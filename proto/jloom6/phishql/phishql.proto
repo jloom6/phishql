@@ -40,6 +40,13 @@ service PhishQLService {
 			body: "*"
 		};
     }
+
+    rpc GetVenues(GetVenuesRequest) returns (GetVenuesResponse) {
+        option (google.api.http) = {
+			post: "/v1/venues"
+			body: "*"
+		};
+    }
 }
 
 message GetShowsRequest {
@@ -152,3 +159,11 @@ message GetToursRequest {
 message GetToursResponse {
     repeated Tour tours = 1;
 }
+
+message GetVenuesRequest {
+}
+
+message GetVenuesResponse {
+    repeated Venue venues = 1;
+}
+

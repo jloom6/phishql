@@ -490,3 +490,65 @@ func TestMapper_ToursToProto(t *testing.T) {
 		})
 	}
 }
+
+func TestMapper_ProtoToGetVenuesRequest(t *testing.T) {
+	tests := []struct{
+		name string
+		req *phishqlpb.GetVenuesRequest
+		ret structs.GetVenuesRequest
+	}{
+		{
+			name: "nil req",
+		},
+		{
+			name: "non-nil req",
+			req: &phishqlpb.GetVenuesRequest{},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.ProtoToGetVenuesRequest(test.req))
+		})
+	}
+}
+
+func TestMapper_VenuesToProto(t *testing.T) {
+	v := structs.Venue{
+		ID:   2009,
+		Name: "Hampton Coliseum",
+		City: "Hampton",
+		State: "VA",
+		Country: "USA",
+	}
+
+	p := &phishqlpb.Venue{
+		Id:      int32(v.ID),
+		Name:    v.Name,
+		City:    v.City,
+		State:   v.State,
+		Country: v.Country,
+	}
+
+	tests := []struct{
+		name string
+		venues []structs.Venue
+		ret []*phishqlpb.Venue
+	}{
+		{
+			name: "success",
+			venues: []structs.Venue{v},
+			ret: []*phishqlpb.Venue{p},
+		},
+	}
+
+	m := New()
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			assert.Equal(_t, test.ret, m.VenuesToProto(test.venues))
+		})
+	}
+}

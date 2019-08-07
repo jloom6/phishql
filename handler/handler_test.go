@@ -243,3 +243,46 @@ func TestHandler_GetTours(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_GetVenues(t *testing.T) {
+	tests := []struct{
+		name string
+		getVenuesRet []structs.Venue
+		getVenuesErr error
+		req *phishqlpb.GetVenuesRequest
+		ret *phishqlpb.GetVenuesResponse
+		err error
+	}{
+		{
+			name: "service.GetVenues error",
+			getVenuesErr: errors.New(""),
+			err: errors.New(""),
+		},
+		{
+			name: "success",
+			getVenuesRet: []structs.Venue{},
+			ret: &phishqlpb.GetVenuesResponse{Venues:[]*phishqlpb.Venue{}},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			mockCtrl := gomock.NewController(_t)
+			defer mockCtrl.Finish()
+
+			mockService := smocks.NewMockInterface(mockCtrl)
+
+			h := New(Params{
+				Service: mockService,
+				Mapper: mapper.New(),
+			})
+
+			mockService.EXPECT().GetVenues(context.Background(), structs.GetVenuesRequest{}).Return(test.getVenuesRet, test.getVenuesErr).Times(1)
+
+			ret, err := h.GetVenues(context.Background(), &phishqlpb.GetVenuesRequest{})
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
+		})
+	}
+}
