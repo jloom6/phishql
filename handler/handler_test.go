@@ -15,35 +15,35 @@ import (
 )
 
 func TestHandler_GetShows(t *testing.T) {
-	tests := []struct{
-		name string
-		getShowsRet []structs.Show
-		getShowsErr error
-		showsToProtoRet []*phishqlpb.Show
-		showsToProtoErr error
+	tests := []struct {
+		name              string
+		getShowsRet       []structs.Show
+		getShowsErr       error
+		showsToProtoRet   []*phishqlpb.Show
+		showsToProtoErr   error
 		showsToProtoTimes int
-		req *phishqlpb.GetShowsRequest
-		ret *phishqlpb.GetShowsResponse
-		err error
+		req               *phishqlpb.GetShowsRequest
+		ret               *phishqlpb.GetShowsResponse
+		err               error
 	}{
 		{
-			name: "service.GetShows error",
+			name:        "service.GetShows error",
 			getShowsErr: errors.New(""),
-			err: errors.New(""),
+			err:         errors.New(""),
 		},
 		{
-			name: "mapper.ShowsToProto error",
-			getShowsRet: []structs.Show{},
-			showsToProtoErr: errors.New(""),
+			name:              "mapper.ShowsToProto error",
+			getShowsRet:       []structs.Show{},
+			showsToProtoErr:   errors.New(""),
 			showsToProtoTimes: 1,
-			err: errors.New(""),
+			err:               errors.New(""),
 		},
 		{
-			name: "success",
-			getShowsRet: []structs.Show{},
-			showsToProtoRet: []*phishqlpb.Show{},
+			name:              "success",
+			getShowsRet:       []structs.Show{},
+			showsToProtoRet:   []*phishqlpb.Show{},
 			showsToProtoTimes: 1,
-			ret: &phishqlpb.GetShowsResponse{Shows:[]*phishqlpb.Show{}},
+			ret:               &phishqlpb.GetShowsResponse{Shows: []*phishqlpb.Show{}},
 		},
 	}
 
@@ -57,7 +57,7 @@ func TestHandler_GetShows(t *testing.T) {
 
 			h := New(Params{
 				Service: mockService,
-				Mapper: mockMapper,
+				Mapper:  mockMapper,
 			})
 
 			mockMapper.EXPECT().ProtoToGetShowsRequest(&phishqlpb.GetShowsRequest{}).Return(structs.GetShowsRequest{}).Times(1)
@@ -73,23 +73,23 @@ func TestHandler_GetShows(t *testing.T) {
 }
 
 func TestHandler_GetArtists(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name          string
 		getArtistsRet []structs.Artist
 		getArtistsErr error
-		req *phishqlpb.GetArtistsRequest
-		ret *phishqlpb.GetArtistsResponse
-		err error
+		req           *phishqlpb.GetArtistsRequest
+		ret           *phishqlpb.GetArtistsResponse
+		err           error
 	}{
 		{
-			name: "service.GetArtists error",
+			name:          "service.GetArtists error",
 			getArtistsErr: errors.New(""),
-			err: errors.New(""),
+			err:           errors.New(""),
 		},
 		{
-			name: "success",
+			name:          "success",
 			getArtistsRet: []structs.Artist{},
-			ret: &phishqlpb.GetArtistsResponse{Artists:[]*phishqlpb.Artist{}},
+			ret:           &phishqlpb.GetArtistsResponse{Artists: []*phishqlpb.Artist{}},
 		},
 	}
 
@@ -102,7 +102,7 @@ func TestHandler_GetArtists(t *testing.T) {
 
 			h := New(Params{
 				Service: mockService,
-				Mapper: mapper.New(),
+				Mapper:  mapper.New(),
 			})
 
 			mockService.EXPECT().GetArtists(context.Background(), structs.GetArtistsRequest{}).Return(test.getArtistsRet, test.getArtistsErr).Times(1)
@@ -116,23 +116,23 @@ func TestHandler_GetArtists(t *testing.T) {
 }
 
 func TestHandler_GetSongs(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name        string
 		getSongsRet []structs.Song
 		getSongsErr error
-		req *phishqlpb.GetSongsRequest
-		ret *phishqlpb.GetSongsResponse
-		err error
+		req         *phishqlpb.GetSongsRequest
+		ret         *phishqlpb.GetSongsResponse
+		err         error
 	}{
 		{
-			name: "service.GetSongs error",
+			name:        "service.GetSongs error",
 			getSongsErr: errors.New(""),
-			err: errors.New(""),
+			err:         errors.New(""),
 		},
 		{
-			name: "success",
+			name:        "success",
 			getSongsRet: []structs.Song{},
-			ret: &phishqlpb.GetSongsResponse{Songs:[]*phishqlpb.Song{}},
+			ret:         &phishqlpb.GetSongsResponse{Songs: []*phishqlpb.Song{}},
 		},
 	}
 
@@ -145,7 +145,7 @@ func TestHandler_GetSongs(t *testing.T) {
 
 			h := New(Params{
 				Service: mockService,
-				Mapper: mapper.New(),
+				Mapper:  mapper.New(),
 			})
 
 			mockService.EXPECT().GetSongs(context.Background(), structs.GetSongsRequest{}).Return(test.getSongsRet, test.getSongsErr).Times(1)
@@ -159,23 +159,23 @@ func TestHandler_GetSongs(t *testing.T) {
 }
 
 func TestHandler_GetTags(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name       string
 		getTagsRet []structs.Tag
 		getTagsErr error
-		req *phishqlpb.GetTagsRequest
-		ret *phishqlpb.GetTagsResponse
-		err error
+		req        *phishqlpb.GetTagsRequest
+		ret        *phishqlpb.GetTagsResponse
+		err        error
 	}{
 		{
-			name: "service.GetTags error",
+			name:       "service.GetTags error",
 			getTagsErr: errors.New(""),
-			err: errors.New(""),
+			err:        errors.New(""),
 		},
 		{
-			name: "success",
+			name:       "success",
 			getTagsRet: []structs.Tag{},
-			ret: &phishqlpb.GetTagsResponse{Tags:[]*phishqlpb.Tag{}},
+			ret:        &phishqlpb.GetTagsResponse{Tags: []*phishqlpb.Tag{}},
 		},
 	}
 
@@ -188,7 +188,7 @@ func TestHandler_GetTags(t *testing.T) {
 
 			h := New(Params{
 				Service: mockService,
-				Mapper: mapper.New(),
+				Mapper:  mapper.New(),
 			})
 
 			mockService.EXPECT().GetTags(context.Background(), structs.GetTagsRequest{}).Return(test.getTagsRet, test.getTagsErr).Times(1)
@@ -202,23 +202,23 @@ func TestHandler_GetTags(t *testing.T) {
 }
 
 func TestHandler_GetTours(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name        string
 		getToursRet []structs.Tour
 		getToursErr error
-		req *phishqlpb.GetToursRequest
-		ret *phishqlpb.GetToursResponse
-		err error
+		req         *phishqlpb.GetToursRequest
+		ret         *phishqlpb.GetToursResponse
+		err         error
 	}{
 		{
-			name: "service.GetTours error",
+			name:        "service.GetTours error",
 			getToursErr: errors.New(""),
-			err: errors.New(""),
+			err:         errors.New(""),
 		},
 		{
-			name: "success",
+			name:        "success",
 			getToursRet: []structs.Tour{},
-			ret: &phishqlpb.GetToursResponse{Tours:[]*phishqlpb.Tour{}},
+			ret:         &phishqlpb.GetToursResponse{Tours: []*phishqlpb.Tour{}},
 		},
 	}
 
@@ -231,7 +231,7 @@ func TestHandler_GetTours(t *testing.T) {
 
 			h := New(Params{
 				Service: mockService,
-				Mapper: mapper.New(),
+				Mapper:  mapper.New(),
 			})
 
 			mockService.EXPECT().GetTours(context.Background(), structs.GetToursRequest{}).Return(test.getToursRet, test.getToursErr).Times(1)
@@ -245,23 +245,23 @@ func TestHandler_GetTours(t *testing.T) {
 }
 
 func TestHandler_GetVenues(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name         string
 		getVenuesRet []structs.Venue
 		getVenuesErr error
-		req *phishqlpb.GetVenuesRequest
-		ret *phishqlpb.GetVenuesResponse
-		err error
+		req          *phishqlpb.GetVenuesRequest
+		ret          *phishqlpb.GetVenuesResponse
+		err          error
 	}{
 		{
-			name: "service.GetVenues error",
+			name:         "service.GetVenues error",
 			getVenuesErr: errors.New(""),
-			err: errors.New(""),
+			err:          errors.New(""),
 		},
 		{
-			name: "success",
+			name:         "success",
 			getVenuesRet: []structs.Venue{},
-			ret: &phishqlpb.GetVenuesResponse{Venues:[]*phishqlpb.Venue{}},
+			ret:          &phishqlpb.GetVenuesResponse{Venues: []*phishqlpb.Venue{}},
 		},
 	}
 
@@ -274,7 +274,7 @@ func TestHandler_GetVenues(t *testing.T) {
 
 			h := New(Params{
 				Service: mockService,
-				Mapper: mapper.New(),
+				Mapper:  mapper.New(),
 			})
 
 			mockService.EXPECT().GetVenues(context.Background(), structs.GetVenuesRequest{}).Return(test.getVenuesRet, test.getVenuesErr).Times(1)

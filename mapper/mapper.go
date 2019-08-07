@@ -8,6 +8,7 @@ import (
 	"github.com/jloom6/phishql/structs"
 )
 
+// Interface wraps the mapping functions so which makes testing easier
 type Interface interface {
 	ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.GetShowsRequest
 	ProtoToGetArtistsRequest(p *phishqlpb.GetArtistsRequest) structs.GetArtistsRequest
@@ -23,12 +24,15 @@ type Interface interface {
 	VenuesToProto(vs []structs.Venue) []*phishqlpb.Venue
 }
 
-type Mapper struct {}
+// Mapper implements the Interface to wrap mapping functions
+type Mapper struct{}
 
+// New constructs a new Mapper
 func New() *Mapper {
 	return &Mapper{}
 }
 
+// ProtoToGetShowsRequest maps a proto to struct
 func (m *Mapper) ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.GetShowsRequest {
 	return structs.GetShowsRequest{
 		Condition: protoToCondition(p.Condition),
@@ -39,7 +43,7 @@ func protoToCondition(p *phishqlpb.Condition) structs.Condition {
 	return structs.Condition{
 		Base: protoToBaseCondition(p.GetBase()),
 		Ands: protoToConditions(p.GetAnd()),
-		Ors: protoToConditions(p.GetOr()),
+		Ors:  protoToConditions(p.GetOr()),
 	}
 }
 
@@ -49,14 +53,14 @@ func protoToBaseCondition(p *phishqlpb.BaseCondition) structs.BaseCondition {
 	}
 
 	return structs.BaseCondition{
-		Year: int(p.Year),
-		Month: int(p.Month),
-		Day: int(p.Day),
+		Year:      int(p.Year),
+		Month:     int(p.Month),
+		Day:       int(p.Day),
 		DayOfWeek: int(p.DayOfWeek),
-		City: p.City,
-		Country: p.Country,
-		State: p.State,
-		Song: p.Song,
+		City:      p.City,
+		Country:   p.Country,
+		State:     p.State,
+		Song:      p.Song,
 	}
 }
 
@@ -74,6 +78,7 @@ func protoToConditions(ps *phishqlpb.Conditions) []structs.Condition {
 	return conditions
 }
 
+// ShowsToProto maps shows to proto
 func (m *Mapper) ShowsToProto(shows []structs.Show) ([]*phishqlpb.Show, error) {
 	ps := make([]*phishqlpb.Show, 0, len(shows))
 
@@ -96,30 +101,30 @@ func showToProto(s structs.Show) (*phishqlpb.Show, error) {
 	}
 
 	return &phishqlpb.Show{
-		Id: int32(s.ID),
-		Date: t,
-		Artist: artistToProto(s.Artist),
-		Venue: venueToProto(s.Venue),
-		Tour: tourToProto(s.Tour),
-		Notes: s.Notes,
+		Id:         int32(s.ID),
+		Date:       t,
+		Artist:     artistToProto(s.Artist),
+		Venue:      venueToProto(s.Venue),
+		Tour:       tourToProto(s.Tour),
+		Notes:      s.Notes,
 		Soundcheck: s.Soundcheck,
-		Sets: setsToProto(s.Sets),
+		Sets:       setsToProto(s.Sets),
 	}, nil
 }
 
 func artistToProto(a structs.Artist) *phishqlpb.Artist {
 	return &phishqlpb.Artist{
-		Id: int32(a.ID),
+		Id:   int32(a.ID),
 		Name: a.Name,
 	}
 }
 
 func venueToProto(v structs.Venue) *phishqlpb.Venue {
 	return &phishqlpb.Venue{
-		Id: int32(v.ID),
-		Name: v.Name,
-		City: v.City,
-		State: v.State,
+		Id:      int32(v.ID),
+		Name:    v.Name,
+		City:    v.City,
+		State:   v.State,
 		Country: v.Country,
 	}
 }
@@ -130,8 +135,8 @@ func tourToProto(t *structs.Tour) *phishqlpb.Tour {
 	}
 
 	return &phishqlpb.Tour{
-		Id: int32(t.ID),
-		Name: t.Name,
+		Id:          int32(t.ID),
+		Name:        t.Name,
 		Description: t.Description,
 	}
 }
@@ -148,7 +153,7 @@ func setsToProto(sets []structs.Set) []*phishqlpb.Set {
 
 func setToProto(s structs.Set) *phishqlpb.Set {
 	return &phishqlpb.Set{
-		Id: int32(s.ID),
+		Id:    int32(s.ID),
 		Label: s.Label,
 		Songs: setSongsToProto(s.Songs),
 	}
@@ -166,15 +171,15 @@ func setSongsToProto(songs []structs.SetSong) []*phishqlpb.SetSong {
 
 func setSongToProto(s structs.SetSong) *phishqlpb.SetSong {
 	return &phishqlpb.SetSong{
-		Song: songToProto(s.Song),
-		Tag: tagToProto(s.Tag),
+		Song:       songToProto(s.Song),
+		Tag:        tagToProto(s.Tag),
 		Transition: s.Transition,
 	}
 }
 
 func songToProto(s structs.Song) *phishqlpb.Song {
 	return &phishqlpb.Song{
-		Id: int32(s.ID),
+		Id:   int32(s.ID),
 		Name: s.Name,
 	}
 }
@@ -185,15 +190,17 @@ func tagToProto(t *structs.Tag) *phishqlpb.Tag {
 	}
 
 	return &phishqlpb.Tag{
-		Id: int32(t.ID),
+		Id:   int32(t.ID),
 		Text: t.Text,
 	}
 }
 
+// ProtoToGetArtistsRequest maps a proto to struct
 func (m *Mapper) ProtoToGetArtistsRequest(p *phishqlpb.GetArtistsRequest) structs.GetArtistsRequest {
 	return structs.GetArtistsRequest{}
 }
 
+// ArtistsToProto maps artists to proto
 func (m *Mapper) ArtistsToProto(as []structs.Artist) []*phishqlpb.Artist {
 	ps := make([]*phishqlpb.Artist, 0, len(as))
 
@@ -204,10 +211,12 @@ func (m *Mapper) ArtistsToProto(as []structs.Artist) []*phishqlpb.Artist {
 	return ps
 }
 
+// ProtoToGetSongsRequest maps a proto to struct
 func (m *Mapper) ProtoToGetSongsRequest(p *phishqlpb.GetSongsRequest) structs.GetSongsRequest {
 	return structs.GetSongsRequest{}
 }
 
+// SongsToProto maps songs to proto
 func (m *Mapper) SongsToProto(ss []structs.Song) []*phishqlpb.Song {
 	ps := make([]*phishqlpb.Song, 0, len(ss))
 
@@ -218,10 +227,12 @@ func (m *Mapper) SongsToProto(ss []structs.Song) []*phishqlpb.Song {
 	return ps
 }
 
+// ProtoToGetTagsRequest maps a proto to struct
 func (m *Mapper) ProtoToGetTagsRequest(p *phishqlpb.GetTagsRequest) structs.GetTagsRequest {
 	return structs.GetTagsRequest{}
 }
 
+// TagsToProto maps tags to proto
 func (m *Mapper) TagsToProto(ts []structs.Tag) []*phishqlpb.Tag {
 	ps := make([]*phishqlpb.Tag, 0, len(ts))
 
@@ -232,10 +243,12 @@ func (m *Mapper) TagsToProto(ts []structs.Tag) []*phishqlpb.Tag {
 	return ps
 }
 
+// ProtoToGetToursRequest maps a proto to struct
 func (m *Mapper) ProtoToGetToursRequest(p *phishqlpb.GetToursRequest) structs.GetToursRequest {
 	return structs.GetToursRequest{}
 }
 
+// ToursToProto maps tours to proto
 func (m *Mapper) ToursToProto(ts []structs.Tour) []*phishqlpb.Tour {
 	ps := make([]*phishqlpb.Tour, 0, len(ts))
 
@@ -246,10 +259,12 @@ func (m *Mapper) ToursToProto(ts []structs.Tour) []*phishqlpb.Tour {
 	return ps
 }
 
+// ProtoToGetVenuesRequest maps a proto to struct
 func (m *Mapper) ProtoToGetVenuesRequest(p *phishqlpb.GetVenuesRequest) structs.GetVenuesRequest {
 	return structs.GetVenuesRequest{}
 }
 
+// VenuesToProto maps venues to proto
 func (m *Mapper) VenuesToProto(vs []structs.Venue) []*phishqlpb.Venue {
 	ps := make([]*phishqlpb.Venue, 0, len(vs))
 

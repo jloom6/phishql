@@ -13,25 +13,25 @@ import (
 )
 
 func TestService_GetShows(t *testing.T) {
-	show1 := structs.Show{Date:time.Now()}
-	show2 := structs.Show{Date:show1.Date.Add(-1 * time.Hour)}
+	show1 := structs.Show{Date: time.Now()}
+	show2 := structs.Show{Date: show1.Date.Add(-1 * time.Hour)}
 
-	tests := []struct{
-		name string
+	tests := []struct {
+		name        string
 		getShowsRet []structs.Show
 		getShowsErr error
-		ret []structs.Show
-		err error
+		ret         []structs.Show
+		err         error
 	}{
 		{
-			name: "store.GetShows error",
+			name:        "store.GetShows error",
 			getShowsErr: errors.New(""),
-			err: errors.New(""),
+			err:         errors.New(""),
 		},
 		{
-			name: "success",
+			name:        "success",
 			getShowsRet: []structs.Show{show1, show2},
-			ret: []structs.Show{show2, show1},
+			ret:         []structs.Show{show2, show1},
 		},
 	}
 
@@ -43,7 +43,7 @@ func TestService_GetShows(t *testing.T) {
 			mockStore := mocks.NewMockInterface(mockCtrl)
 
 			s := New(Params{
-				Store:mockStore,
+				Store: mockStore,
 			})
 
 			mockStore.EXPECT().GetShows(context.Background(), structs.GetShowsRequest{}).Return(test.getShowsRet, test.getShowsErr).Times(1)
@@ -57,17 +57,17 @@ func TestService_GetShows(t *testing.T) {
 }
 
 func TestService_GetArtists(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name          string
 		getArtistsRet []structs.Artist
-		getArtistErr error
-		ret []structs.Artist
-		err error
+		getArtistErr  error
+		ret           []structs.Artist
+		err           error
 	}{
 		{
-			name: "success",
+			name:          "success",
 			getArtistsRet: []structs.Artist{},
-			ret: []structs.Artist{},
+			ret:           []structs.Artist{},
 		},
 	}
 
@@ -79,7 +79,7 @@ func TestService_GetArtists(t *testing.T) {
 			mockStore := mocks.NewMockInterface(mockCtrl)
 
 			s := New(Params{
-				Store:mockStore,
+				Store: mockStore,
 			})
 
 			mockStore.EXPECT().GetArtists(context.Background(), structs.GetArtistsRequest{}).Return(test.getArtistsRet, test.getArtistErr).Times(1)
@@ -93,17 +93,17 @@ func TestService_GetArtists(t *testing.T) {
 }
 
 func TestService_GetSongs(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name        string
 		getSongsRet []structs.Song
 		getSongsErr error
-		ret []structs.Song
-		err error
+		ret         []structs.Song
+		err         error
 	}{
 		{
-			name: "success",
+			name:        "success",
 			getSongsRet: []structs.Song{},
-			ret: []structs.Song{},
+			ret:         []structs.Song{},
 		},
 	}
 
@@ -115,7 +115,7 @@ func TestService_GetSongs(t *testing.T) {
 			mockStore := mocks.NewMockInterface(mockCtrl)
 
 			s := New(Params{
-				Store:mockStore,
+				Store: mockStore,
 			})
 
 			mockStore.EXPECT().GetSongs(context.Background(), structs.GetSongsRequest{}).Return(test.getSongsRet, test.getSongsErr).Times(1)
@@ -129,17 +129,17 @@ func TestService_GetSongs(t *testing.T) {
 }
 
 func TestService_GetTags(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name       string
 		getTagsRet []structs.Tag
 		getTagsErr error
-		ret []structs.Tag
-		err error
+		ret        []structs.Tag
+		err        error
 	}{
 		{
-			name: "success",
+			name:       "success",
 			getTagsRet: []structs.Tag{},
-			ret: []structs.Tag{},
+			ret:        []structs.Tag{},
 		},
 	}
 
@@ -151,7 +151,7 @@ func TestService_GetTags(t *testing.T) {
 			mockStore := mocks.NewMockInterface(mockCtrl)
 
 			s := New(Params{
-				Store:mockStore,
+				Store: mockStore,
 			})
 
 			mockStore.EXPECT().GetTags(context.Background(), structs.GetTagsRequest{}).Return(test.getTagsRet, test.getTagsErr).Times(1)
@@ -165,17 +165,17 @@ func TestService_GetTags(t *testing.T) {
 }
 
 func TestService_GetTours(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name        string
 		getToursRet []structs.Tour
 		getToursErr error
-		ret []structs.Tour
-		err error
+		ret         []structs.Tour
+		err         error
 	}{
 		{
-			name: "success",
+			name:        "success",
 			getToursRet: []structs.Tour{},
-			ret: []structs.Tour{},
+			ret:         []structs.Tour{},
 		},
 	}
 
@@ -187,7 +187,7 @@ func TestService_GetTours(t *testing.T) {
 			mockStore := mocks.NewMockInterface(mockCtrl)
 
 			s := New(Params{
-				Store:mockStore,
+				Store: mockStore,
 			})
 
 			mockStore.EXPECT().GetTours(context.Background(), structs.GetToursRequest{}).Return(test.getToursRet, test.getToursErr).Times(1)
@@ -201,17 +201,17 @@ func TestService_GetTours(t *testing.T) {
 }
 
 func TestService_GetVenues(t *testing.T) {
-	tests := []struct{
-		name string
+	tests := []struct {
+		name         string
 		getVenuesRet []structs.Venue
 		getVenuesErr error
-		ret []structs.Venue
-		err error
+		ret          []structs.Venue
+		err          error
 	}{
 		{
-			name: "success",
+			name:         "success",
 			getVenuesRet: []structs.Venue{},
-			ret: []structs.Venue{},
+			ret:          []structs.Venue{},
 		},
 	}
 
@@ -223,7 +223,7 @@ func TestService_GetVenues(t *testing.T) {
 			mockStore := mocks.NewMockInterface(mockCtrl)
 
 			s := New(Params{
-				Store:mockStore,
+				Store: mockStore,
 			})
 
 			mockStore.EXPECT().GetVenues(context.Background(), structs.GetVenuesRequest{}).Return(test.getVenuesRet, test.getVenuesErr).Times(1)
