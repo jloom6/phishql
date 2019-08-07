@@ -26,6 +26,13 @@ service PhishQLService {
 			body: "*"
 		};
     }
+
+    rpc GetTags(GetTagsRequest) returns (GetTagsResponse) {
+        option (google.api.http) = {
+			post: "/v1/tags"
+			body: "*"
+		};
+    }
 }
 
 message GetShowsRequest {
@@ -125,3 +132,9 @@ message GetSongsResponse {
     repeated Song songs = 1;
 }
 
+message GetTagsRequest {
+}
+
+message GetTagsResponse {
+    repeated Tag tags = 1;
+}

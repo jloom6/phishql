@@ -90,6 +90,20 @@ func (mr *MockInterfaceMockRecorder) ProtoToGetSongsRequest(arg0 interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProtoToGetSongsRequest", reflect.TypeOf((*MockInterface)(nil).ProtoToGetSongsRequest), arg0)
 }
 
+// ProtoToGetTagsRequest mocks base method
+func (m *MockInterface) ProtoToGetTagsRequest(arg0 *phishql.GetTagsRequest) structs.GetTagsRequest {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ProtoToGetTagsRequest", arg0)
+	ret0, _ := ret[0].(structs.GetTagsRequest)
+	return ret0
+}
+
+// ProtoToGetTagsRequest indicates an expected call of ProtoToGetTagsRequest
+func (mr *MockInterfaceMockRecorder) ProtoToGetTagsRequest(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProtoToGetTagsRequest", reflect.TypeOf((*MockInterface)(nil).ProtoToGetTagsRequest), arg0)
+}
+
 // ShowsToProto mocks base method
 func (m *MockInterface) ShowsToProto(arg0 []structs.Show) ([]*phishql.Show, error) {
 	m.ctrl.T.Helper()
@@ -117,4 +131,18 @@ func (m *MockInterface) SongsToProto(arg0 []structs.Song) []*phishql.Song {
 func (mr *MockInterfaceMockRecorder) SongsToProto(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SongsToProto", reflect.TypeOf((*MockInterface)(nil).SongsToProto), arg0)
+}
+
+// TagsToProto mocks base method
+func (m *MockInterface) TagsToProto(arg0 []structs.Tag) []*phishql.Tag {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TagsToProto", arg0)
+	ret0, _ := ret[0].([]*phishql.Tag)
+	return ret0
+}
+
+// TagsToProto indicates an expected call of TagsToProto
+func (mr *MockInterfaceMockRecorder) TagsToProto(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TagsToProto", reflect.TypeOf((*MockInterface)(nil).TagsToProto), arg0)
 }

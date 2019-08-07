@@ -12,9 +12,11 @@ type Interface interface {
 	ProtoToGetShowsRequest(p *phishqlpb.GetShowsRequest) structs.GetShowsRequest
 	ProtoToGetArtistsRequest(p *phishqlpb.GetArtistsRequest) structs.GetArtistsRequest
 	ProtoToGetSongsRequest(p *phishqlpb.GetSongsRequest) structs.GetSongsRequest
+	ProtoToGetTagsRequest(p *phishqlpb.GetTagsRequest) structs.GetTagsRequest
 	ShowsToProto(shows []structs.Show) ([]*phishqlpb.Show, error)
 	ArtistsToProto(as []structs.Artist) []*phishqlpb.Artist
 	SongsToProto(ss []structs.Song) []*phishqlpb.Song
+	TagsToProto(ts []structs.Tag) []*phishqlpb.Tag
 }
 
 type Mapper struct {}
@@ -207,6 +209,20 @@ func (m *Mapper) SongsToProto(ss []structs.Song) []*phishqlpb.Song {
 
 	for _, s := range ss {
 		ps = append(ps, songToProto(s))
+	}
+
+	return ps
+}
+
+func (m *Mapper) ProtoToGetTagsRequest(p *phishqlpb.GetTagsRequest) structs.GetTagsRequest {
+	return structs.GetTagsRequest{}
+}
+
+func (m *Mapper) TagsToProto(ts []structs.Tag) []*phishqlpb.Tag {
+	ps := make([]*phishqlpb.Tag, 0, len(ts))
+
+	for _, t := range ts {
+		ps = append(ps, tagToProto(&t))
 	}
 
 	return ps

@@ -14,6 +14,7 @@ type Interface interface {
 	GetShows(ctx context.Context, req structs.GetShowsRequest) ([]structs.Show, error)
 	GetArtists(ctx context.Context, req structs.GetArtistsRequest) ([]structs.Artist, error)
 	GetSongs(ctx context.Context, req structs.GetSongsRequest) ([]structs.Song, error)
+	GetTags(ctx context.Context, req structs.GetTagsRequest) ([]structs.Tag, error)
 }
 
 type Service struct {
@@ -45,4 +46,8 @@ func (s *Service) GetArtists(ctx context.Context, req structs.GetArtistsRequest)
 
 func (s *Service) GetSongs(ctx context.Context, req structs.GetSongsRequest) ([]structs.Song, error) {
 	return s.store.GetSongs(ctx, req)
+}
+
+func (s *Service) GetTags(ctx context.Context, req structs.GetTagsRequest) ([]structs.Tag, error) {
+	return s.store.GetTags(ctx, req)
 }

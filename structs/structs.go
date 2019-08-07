@@ -82,3 +82,6 @@ type GetArtistsRequest struct {
 
 type GetSongsRequest struct {
 }
+
+type GetTagsRequest struct {
+}
