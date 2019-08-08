@@ -18,7 +18,7 @@ git clone git@github.com:jloom6/phishql.git
 
 **Bootstrap**
 
-This assumes that you have [golang installed](https://golang.org/doc/install).
+This assumes that you have [golang](https://golang.org/doc/install) and [dep](https://golang.github.io/dep/docs/installation.html) installed.
 
 ```
 cd phishql

@@ -36,7 +36,7 @@ build:
 
 .PHONY: mocks
 mocks:
-	$(shell go generate `glide novendor`)
+	go generate ./...
 
 .PHONY: test
 test:
