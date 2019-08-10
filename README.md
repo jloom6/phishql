@@ -63,14 +63,14 @@ Swagger json can be found in [here](https://github.com/jloom6/phishql/blob/maste
 
 I'll be more descriptive of the endpoints eventually, the swagger docs should be sufficient for now.
 
-|gRPC|HTTP|
-|---|---|
-|GetShows|/v1/shows|
-|GetArtists|/v1/arists|
-|GetSongs|/v1/songs|
-|GetTags|/v1/tags|
-|GetTours|/v1/tours|
-|GetVenues|/v1/venues|
+|gRPC|HTTP|GraphQL|
+|---|---|---|
+|GetShows|/v1/shows|shows|
+|GetArtists|/v1/arists|artists|
+|GetSongs|/v1/songs|songs|
+|GetTags|/v1/tags|tags|
+|GetTours|/v1/tours|tours|
+|GetVenues|/v1/venues|venues|
 
 **Base Conditions**
 
@@ -100,7 +100,7 @@ The fields in the base condition are all "anded" together. If you leave the fiel
 You can compose the conditions using "and" and "or" as demonstrated below. The query is for shows that occurred in the state of NJ AND occurred on a Sunday OR Saturday
 
 ```
-curl -d '{
+curl -XPOST -d '{
     "condition": {
         "and": {
             "conditions": [

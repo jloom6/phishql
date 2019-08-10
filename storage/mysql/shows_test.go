@@ -221,9 +221,9 @@ func TestMakeClauseAndArgs(t *testing.T) {
 		{
 			name: "and or base",
 			condition: structs.Condition{
-				Ands: []structs.Condition{
+				And: []structs.Condition{
 					{
-						Ors: []structs.Condition{
+						Or: []structs.Condition{
 							{
 								Base: structs.BaseCondition{
 									DayOfWeek: 1,

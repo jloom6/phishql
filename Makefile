@@ -30,9 +30,11 @@ build:
 	make proto
 	GOOS=linux go build -o ./cmd/api/phishql-api ./cmd/api/main.go
 	GOOS=linux go build -o ./cmd/proxy/phishql-proxy ./cmd/proxy/main.go
+	GOOS=linux go build -o ./cmd/graphql/phishql-graphql ./cmd/graphql/main.go
 	docker build -f cmd/api/Dockerfile -t jloom6/phishql-api .
 	docker build -f cmd/proxy/Dockerfile -t jloom6/phishql-proxy .
 	docker build -f cmd/migration/Dockerfile -t jloom6/phishql-migration .
+	docker build -f cmd/graphql/Dockerfile -t jloom6/phishql-graphql .
 
 .PHONY: mocks
 mocks:
@@ -46,7 +48,7 @@ test:
 
 .PHONY: run-api
 run-api:
-	docker run -p 9090:9090 --name=phishql-api -e "PHISHQL_MYSQL_HOST=$$(docker-machine ip default)" jloom6/phishql-api
+	docker run -p 9090:9090 --name=phishql-api -e "PHISHQL_MYSQL_HOST=$$(docker-machine ip)" jloom6/phishql-api
 
 .PHONY: run-db
 run-db:
@@ -54,7 +56,11 @@ run-db:
 
 .PHONY: run-proxy
 run-proxy:
-	docker run -p 8080:8080 --name=phishql-proxy -e "PHISHQL_API_ENDPOINT=$$(docker-machine ip default):9090" jloom6/phishql-proxy
+	docker run -p 8080:8080 --name=phishql-proxy -e "PHISHQL_API_ENDPOINT=$$(docker-machine ip):9090" jloom6/phishql-proxy
+
+.PHONY: run-graphql
+run-graphql:
+	docker run -p 8420:8420 --name=phishql-graphql -e "PHISHQL_API_ENDPOINT=$$(docker-machine ip):9090" jloom6/phishql-graphql
 
 .PHONY: run-all
 run-all:
@@ -62,9 +68,9 @@ run-all:
 
 .PHONY: clean
 clean:
-	-docker stop phishql-proxy phishql-api phishql-migration phishql-mysql
-	-docker rm phishql-proxy phishql-api phishql-migration phishql-mysql
-	-docker image rm jloom6/phishql-migration jloom6/phishql-proxy jloom6/phishql-api
+	-docker stop phishql-proxy phishql-api phishql-migration phishql-mysql phishql-graphql
+	-docker rm phishql-proxy phishql-api phishql-migration phishql-mysql phishql-graphql
+	-docker image rm jloom6/phishql-migration jloom6/phishql-proxy jloom6/phishql-api jloom6/phishql-graphql
 	rm -rf .gen vendor
 
 .PHONY: run-hard

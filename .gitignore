@@ -14,3 +14,4 @@ vendor
 _tools
 cmd/api/phishql-api
 cmd/proxy/phishql-proxy
+cmd/graphql/phishql-graphql

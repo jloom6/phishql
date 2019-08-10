@@ -47,7 +47,7 @@ func TestMapper_ProtoToGetShowsRequest(t *testing.T) {
 			req:  req,
 			ret: structs.GetShowsRequest{
 				Condition: structs.Condition{
-					Ands: []structs.Condition{
+					And: []structs.Condition{
 						{
 							Base: structs.BaseCondition{
 								Year:      int(req.Condition.GetAnd().Conditions[0].GetBase().Year),
@@ -548,6 +548,114 @@ func TestMapper_VenuesToProto(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(_t *testing.T) {
 			assert.Equal(_t, test.ret, m.VenuesToProto(test.venues))
+		})
+	}
+}
+
+func TestMakeBaseCondition(t *testing.T) {
+	bc := &phishqlpb.BaseCondition{
+		Year: 2018,
+		Month: 10,
+		Day: 31,
+		DayOfWeek: 4,
+		City: "Las Vegas",
+		State: "NV",
+		Country: "USA",
+		Song: "Say It To Me S.A.N.T.O.S.",
+	}
+
+	tests := []struct {
+		name string
+		arg  interface{}
+		ret  *phishqlpb.Condition
+		err  error
+	}{
+		{
+			name: "not a map",
+			err:  errors.New("base condition must be a map"),
+		},
+		{
+			name: "year not an int",
+			arg: map[string]interface{}{
+				"year": "not an int",
+			},
+			err:  errors.New("year must be an int"),
+		},
+		{
+			name: "month not an int",
+			arg: map[string]interface{}{
+				"month": "not an int",
+			},
+			err:  errors.New("month must be an int"),
+		},
+		{
+			name: "day not an int",
+			arg: map[string]interface{}{
+				"day": "not an int",
+			},
+			err:  errors.New("day must be an int"),
+		},
+		{
+			name: "dayOfWeek not an int",
+			arg: map[string]interface{}{
+				"dayOfWeek": "not an int",
+			},
+			err:  errors.New("dayOfWeek must be an int"),
+		},
+		{
+			name: "city not a string",
+			arg: map[string]interface{}{
+				"city": 1,
+			},
+			err:  errors.New("city must be a string"),
+		},
+		{
+			name: "state not a string",
+			arg: map[string]interface{}{
+				"state": 1,
+			},
+			err:  errors.New("state must be a string"),
+		},
+		{
+			name: "country not a string",
+			arg: map[string]interface{}{
+				"country": 1,
+			},
+			err:  errors.New("country must be a string"),
+		},
+		{
+			name: "song not a string",
+			arg: map[string]interface{}{
+				"song": 1,
+			},
+			err:  errors.New("song must be a string"),
+		},
+		{
+			name: "success",
+			arg: map[string]interface{}{
+				"year": int(bc.Year),
+				"month": int(bc.Month),
+				"day": int(bc.Day),
+				"dayOfWeek": int(bc.DayOfWeek),
+				"city": bc.City,
+				"state": bc.State,
+				"country": bc.Country,
+				"song": bc.Song,
+			},
+			ret: &phishqlpb.Condition{
+				Condition: &phishqlpb.Condition_Base{
+					Base: bc,
+				},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(_t *testing.T) {
+			ret, err := makeBaseCondition(test.arg)
+
+			assert.Equal(_t, test.ret, ret)
+			assert.Equal(_t, test.err, err)
 		})
 	}
 }
