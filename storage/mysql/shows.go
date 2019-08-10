@@ -133,11 +133,11 @@ func makeQueryAndArgs(baseQuery string, c structs.Condition) (string, []interfac
 }
 
 func makeClauseAndArgs(c structs.Condition) (string, []interface{}) {
-	if c.Ands != nil {
+	if c.And != nil {
 		return makeAndClauseAndArgs(c)
 	}
 
-	if c.Ors != nil {
+	if c.Or != nil {
 		return makeOrClauseAndArgs(c)
 	}
 
@@ -145,7 +145,7 @@ func makeClauseAndArgs(c structs.Condition) (string, []interface{}) {
 }
 
 func makeAndClauseAndArgs(c structs.Condition) (string, []interface{}) {
-	return makeClausesAndArgs(c.Ands, " AND ")
+	return makeClausesAndArgs(c.And, " AND ")
 }
 
 func makeClausesAndArgs(cs []structs.Condition, joiner string) (string, []interface{}) {
@@ -163,7 +163,7 @@ func makeClausesAndArgs(cs []structs.Condition, joiner string) (string, []interf
 }
 
 func makeOrClauseAndArgs(c structs.Condition) (string, []interface{}) {
-	return makeClausesAndArgs(c.Ors, " OR ")
+	return makeClausesAndArgs(c.Or, " OR ")
 }
 
 func makeBaseClauseAndArgs(c structs.Condition) (string, []interface{}) {

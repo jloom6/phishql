@@ -7,21 +7,21 @@ type GetShowsRequest struct {
 
 // Condition allows you to compose base conditions
 type Condition struct {
-	Base BaseCondition
-	Ands []Condition
-	Ors  []Condition
+	Base BaseCondition `json:"base"`
+	And  []Condition   `json:"and"`
+	Or   []Condition   `json:"or"`
 }
 
 // BaseCondition is the base conditions for querying
 type BaseCondition struct {
-	Year      int
-	Month     int
-	Day       int
-	DayOfWeek int
-	City      string
-	State     string
-	Country   string
-	Song      string
+	Year      int    `json:"year"`
+	Month     int    `json:"month"`
+	Day       int    `json:"day"`
+	DayOfWeek int    `json:"dayOfWeek"`
+	City      string `json:"city"`
+	State     string `json:"state"`
+	Country   string `json:"country"`
+	Song      string `json:"song"`
 }
 
 // GetArtistsRequest is a request to get artists
