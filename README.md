@@ -142,7 +142,7 @@ input BaseCondition {
     year: Int
     month: Int
     day: Int
-    dayOfWeek": Int
+    dayOfWeek: Int
     city: String
     state: String
     country: String
