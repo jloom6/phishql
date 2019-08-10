@@ -38,6 +38,8 @@ build:
 
 .PHONY: mocks
 mocks:
+	make proto
+	mkdir -p .gen/proto/jloom6/phishql/mocks
 	go generate ./...
 
 .PHONY: test

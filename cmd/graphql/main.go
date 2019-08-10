@@ -48,7 +48,7 @@ func closeConn(c io.Closer) {
 
 func makeHandleFunc(cc *grpc.ClientConn) func(http.ResponseWriter, *http.Request) {
 	r := resolver.New(resolver.Params{
-		API:    phishqlpb.NewPhishQLServiceClient(cc),
+		Client:    phishqlpb.NewPhishQLServiceClient(cc),
 		Mapper: mapper.New(),
 	})
 	f, err := schema.NewHandleFunc(schema.Params{

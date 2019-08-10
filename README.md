@@ -1,6 +1,6 @@
 # PhishQL
 
-I got bored and did this. I have no shame. Yes it is extremely over-engineered. But when the time comes for an enterprise level, distributed, Phish setlist data solution with 100% code coverage we'll see who's laughing.
+I got bored and did this. I have no shame. Yes it is extremely over-engineered. But when the time comes for an enterprise level, distributed, Phish setlist data solution with 100% code coverage we'll see who's laughing. So far it's mostly served as a way for me to learn some new technologies like Docker and GraphQL.
 
 Some would ask "Why use gRPC for this?", I ask "Why not?".
 
@@ -132,6 +132,75 @@ curl -XPOST -d '{
 ```
 
 If the entity model seems a bit... superfluous, that is because they are auto-generated from proto files using [gRPC Gateway](https://github.com/grpc-ecosystem/grpc-gateway).
+
+**GraphQL**
+
+I implemented a GraphQL service for this because why not. Right now the only interesting query would be shows. FYI I'm not sure if the input syntax in my example is entirely correct given the circular dependency
+
+```
+input BaseCondition {
+    year: Int
+    month: Int
+    day: Int
+    dayOfWeek": Int
+    city: String
+    state: String
+    country: String
+    song: String
+}
+
+input Condition {
+  and: [Condition]
+  or: [Condition]
+  base: BaseCondition
+}
+```
+An example query could look like this for shows in the state of NJ in 2019
+```
+{
+    shows(condition: {
+        and: [
+            {
+                base: {
+                    year: 2019
+                }
+            },
+            {
+                base: {
+                    state: "NJ"
+                }
+            }
+        ]
+    }) {
+        date,
+        venue {
+            name,
+            city,
+            state,
+            country
+        },
+        tour {
+            name
+        },
+        sets {
+            label,
+            songs {
+                tag {
+                    text
+                },
+                song {
+                    name
+                },
+                transition
+            }
+        }
+    }
+}
+```
+The example curl for the request would be this
+```
+curl -g "http://$(docker-machine ip):8420/graphql?query={shows(condition:{and:[{base:{year:2019}},{base:{state:\"NJ\"}}]}){date,venue{name,city,state,country},tour{name},sets{label,songs{tag{text},song{name},transition}}}}" | jq .
+```
 
 Your hands and feet are mangoes, you're gonna be a genius anyway.
 

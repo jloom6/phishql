@@ -212,6 +212,7 @@
     "github.com/go-sql-driver/mysql",
     "github.com/golang/mock/gomock",
     "github.com/golang/protobuf/ptypes",
+    "github.com/golang/protobuf/ptypes/timestamp",
     "github.com/graphql-go/graphql",
     "github.com/grpc-ecosystem/grpc-gateway/runtime",
     "github.com/stretchr/testify/assert",

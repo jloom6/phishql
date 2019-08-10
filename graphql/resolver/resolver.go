@@ -1,5 +1,7 @@
 package resolver
 
+//go:generate retool do mockgen -destination=../../.gen/proto/jloom6/phishql/mocks/client.go -package=mocks github.com/jloom6/phishql/.gen/proto/jloom6/phishql PhishQLServiceClient
+
 import (
 	"github.com/graphql-go/graphql"
 	phishqlpb "github.com/jloom6/phishql/.gen/proto/jloom6/phishql"
@@ -17,24 +19,24 @@ type Interface interface {
 }
 
 type Resolver struct {
-	api    phishqlpb.PhishQLServiceClient
+	client    phishqlpb.PhishQLServiceClient
 	mapper mapper.Interface
 }
 
 type Params struct {
-	API    phishqlpb.PhishQLServiceClient
+	Client    phishqlpb.PhishQLServiceClient
 	Mapper mapper.Interface
 }
 
 func New(p Params) *Resolver {
 	return &Resolver{
-		api:    p.API,
+		client:    p.Client,
 		mapper: p.Mapper,
 	}
 }
 
 func (r *Resolver) GetArtists(p graphql.ResolveParams) (interface{}, error) {
-	resp, err := r.api.GetArtists(p.Context, &phishqlpb.GetArtistsRequest{})
+	resp, err := r.client.GetArtists(p.Context, &phishqlpb.GetArtistsRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +50,7 @@ func (r *Resolver) GetShows(p graphql.ResolveParams) (interface{}, error) {
 		return nil, err
 	}
 
-	resp, err := r.api.GetShows(p.Context, req)
+	resp, err := r.client.GetShows(p.Context, req)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +59,7 @@ func (r *Resolver) GetShows(p graphql.ResolveParams) (interface{}, error) {
 }
 
 func (r *Resolver) GetSongs(p graphql.ResolveParams) (interface{}, error) {
-	resp, err := r.api.GetSongs(p.Context, &phishqlpb.GetSongsRequest{})
+	resp, err := r.client.GetSongs(p.Context, &phishqlpb.GetSongsRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +68,7 @@ func (r *Resolver) GetSongs(p graphql.ResolveParams) (interface{}, error) {
 }
 
 func (r *Resolver) GetTags(p graphql.ResolveParams) (interface{}, error) {
-	resp, err := r.api.GetTags(p.Context, &phishqlpb.GetTagsRequest{})
+	resp, err := r.client.GetTags(p.Context, &phishqlpb.GetTagsRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +77,7 @@ func (r *Resolver) GetTags(p graphql.ResolveParams) (interface{}, error) {
 }
 
 func (r *Resolver) GetTours(p graphql.ResolveParams) (interface{}, error) {
-	resp, err := r.api.GetTours(p.Context, &phishqlpb.GetToursRequest{})
+	resp, err := r.client.GetTours(p.Context, &phishqlpb.GetToursRequest{})
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +86,7 @@ func (r *Resolver) GetTours(p graphql.ResolveParams) (interface{}, error) {
 }
 
 func (r *Resolver) GetVenues(p graphql.ResolveParams) (interface{}, error) {
-	resp, err := r.api.GetVenues(p.Context, &phishqlpb.GetVenuesRequest{})
+	resp, err := r.client.GetVenues(p.Context, &phishqlpb.GetVenuesRequest{})
 	if err != nil {
 		return nil, err
 	}

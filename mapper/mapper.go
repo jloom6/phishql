@@ -323,6 +323,10 @@ func (m *Mapper) ProtoToShows(ps []*phishqlpb.Show) ([]structs.Show, error) {
 }
 
 func protoToShow(p *phishqlpb.Show) (structs.Show, error) {
+	if p == nil {
+		return structs.Show{}, nil
+	}
+
 	t, err := ptypes.Timestamp(p.Date)
 	if err != nil {
 		return structs.Show{}, err
@@ -451,6 +455,7 @@ func protoToTour(p *phishqlpb.Tour) *structs.Tour {
 	return &structs.Tour{
 		ID:   int(p.Id),
 		Name: p.Name,
+		Description: p.Description,
 	}
 }
 
@@ -514,7 +519,11 @@ func makeCondition(arg interface{}) (*phishqlpb.Condition, error) {
 		return makeBaseCondition(base)
 	}
 
-	return &phishqlpb.Condition{}, nil
+	return &phishqlpb.Condition{
+		Condition: &phishqlpb.Condition_Base{
+			Base: &phishqlpb.BaseCondition{},
+		},
+	}, nil
 }
 
 func makeAndCondition(arg interface{}) (*phishqlpb.Condition, error) {
@@ -535,7 +544,7 @@ func makeAndCondition(arg interface{}) (*phishqlpb.Condition, error) {
 func makeConditions(arg interface{}) ([]*phishqlpb.Condition, error) {
 	args, ok := arg.([]interface{})
 	if !ok {
-		return nil, errors.New("and condition must be a slice")
+		return nil, errors.New("conditions must be a slice")
 	}
 
 	cs := make([]*phishqlpb.Condition, 0, len(args))
