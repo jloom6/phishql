@@ -6,7 +6,7 @@ import (
 
 var (
 	isInitiated = false
-
+	// ArtistType is the GraphQL schema for an artist
 	ArtistType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Artist",
@@ -20,7 +20,7 @@ var (
 			},
 		},
 	)
-
+	// SetSongType is the GraphQL schema for a set song
 	SetSongType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "SetSong",
@@ -37,7 +37,7 @@ var (
 			},
 		},
 	)
-
+	// SetType is the GraphQL schema for a set
 	SetType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Set",
@@ -54,7 +54,7 @@ var (
 			},
 		},
 	)
-
+	// ShowType is the GraphQL schema for a show
 	ShowType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Show",
@@ -86,7 +86,7 @@ var (
 			},
 		},
 	)
-
+	// SongType is the GraphQL schema for a song
 	SongType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Song",
@@ -100,7 +100,7 @@ var (
 			},
 		},
 	)
-
+	// TagType is the GraphQL schema for a tag
 	TagType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Tag",
@@ -114,7 +114,7 @@ var (
 			},
 		},
 	)
-
+	// TourType is the GraphQL schema for a tour
 	TourType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Tour",
@@ -131,7 +131,7 @@ var (
 			},
 		},
 	)
-
+	// VenueType is the GraphQL schema for a venue
 	VenueType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Venue",
@@ -154,7 +154,7 @@ var (
 			},
 		},
 	)
-
+	// ConditionType is the GraphQL schema for a condition
 	ConditionType = graphql.NewInputObject(
 		graphql.InputObjectConfig{
 			Name: "Condition",
@@ -165,7 +165,7 @@ var (
 			},
 		},
 	)
-
+	// BaseConditionType is the GraphQL schema for a base condition
 	BaseConditionType = graphql.NewInputObject(
 		graphql.InputObjectConfig{
 			Name: "BaseCondition",

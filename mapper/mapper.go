@@ -434,7 +434,7 @@ func protoToTag(p *phishqlpb.Tag) *structs.Tag {
 	}
 }
 
-// ProtoToVenues maps a proto to struct
+// ProtoToTours maps a proto to struct
 func (m *Mapper) ProtoToTours(ps []*phishqlpb.Tour) []structs.Tour {
 	ts := make([]structs.Tour, 0, len(ps))
 
@@ -453,8 +453,8 @@ func protoToTour(p *phishqlpb.Tour) *structs.Tour {
 	}
 
 	return &structs.Tour{
-		ID:   int(p.Id),
-		Name: p.Name,
+		ID:          int(p.Id),
+		Name:        p.Name,
 		Description: p.Description,
 	}
 }
@@ -491,7 +491,7 @@ func (m *Mapper) GraphQLShowsToProto(args map[string]interface{}) (*phishqlpb.Ge
 		return nil, err
 	}
 
-	return &phishqlpb.GetShowsRequest{Condition:c}, nil
+	return &phishqlpb.GetShowsRequest{Condition: c}, nil
 }
 
 func makeCondition(arg interface{}) (*phishqlpb.Condition, error) {

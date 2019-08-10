@@ -527,19 +527,19 @@ func TestMapper_ProtoToArtists(t *testing.T) {
 	}
 
 	tests := []struct {
-		name    string
+		name  string
 		proto []*phishqlpb.Artist
-		ret     []structs.Artist
+		ret   []structs.Artist
 	}{
 		{
-			name: "nil artist",
+			name:  "nil artist",
 			proto: []*phishqlpb.Artist{nil},
-			ret: []structs.Artist{{}},
+			ret:   []structs.Artist{{}},
 		},
 		{
-			name:    "success",
+			name:  "success",
 			proto: []*phishqlpb.Artist{p},
-			ret:     []structs.Artist{a},
+			ret:   []structs.Artist{a},
 		},
 	}
 
@@ -554,7 +554,7 @@ func TestMapper_ProtoToArtists(t *testing.T) {
 
 func TestMapper_ProtoToShows(t *testing.T) {
 	s := structs.Show{
-		ID: 2,
+		ID:   2,
 		Date: time.Date(2019, 3, 17, 0, 0, 0, 0, time.UTC),
 		Artist: structs.Artist{
 			ID:   3,
@@ -572,7 +572,7 @@ func TestMapper_ProtoToShows(t *testing.T) {
 			Name:        "2015 Summer Tour",
 			Description: "The end of set spelling at Dick's",
 		},
-		Notes: "these are notes",
+		Notes:      "these are notes",
 		Soundcheck: "soundcheck",
 		Sets: []structs.Set{
 			{
@@ -598,25 +598,25 @@ func TestMapper_ProtoToShows(t *testing.T) {
 	pDate := &timestamp.Timestamp{Seconds: s.Date.Unix()}
 
 	p := &phishqlpb.Show{
-		Id: int32(s.ID),
+		Id:   int32(s.ID),
 		Date: pDate,
 		Artist: &phishqlpb.Artist{
-			Id:                   int32(s.Artist.ID),
-			Name:                 s.Artist.Name,
+			Id:   int32(s.Artist.ID),
+			Name: s.Artist.Name,
 		},
 		Venue: &phishqlpb.Venue{
-			Id:                   int32(s.Venue.ID),
-			Name:                 s.Venue.Name,
-			City:                 s.Venue.City,
-			State:                s.Venue.State,
-			Country:              s.Venue.Country,
+			Id:      int32(s.Venue.ID),
+			Name:    s.Venue.Name,
+			City:    s.Venue.City,
+			State:   s.Venue.State,
+			Country: s.Venue.Country,
 		},
 		Tour: &phishqlpb.Tour{
-			Id:                   int32(s.Tour.ID),
-			Name:                 s.Tour.Name,
-			Description:          s.Tour.Description,
+			Id:          int32(s.Tour.ID),
+			Name:        s.Tour.Name,
+			Description: s.Tour.Description,
 		},
-		Notes: s.Notes,
+		Notes:      s.Notes,
 		Soundcheck: s.Soundcheck,
 		Sets: []*phishqlpb.Set{
 			{
@@ -653,7 +653,7 @@ func TestMapper_ProtoToShows(t *testing.T) {
 		{
 			name:  "protoToShow error",
 			proto: []*phishqlpb.Show{{}},
-			err: errors.New("timestamp: nil Timestamp"),
+			err:   errors.New("timestamp: nil Timestamp"),
 		},
 		{
 			name:  "success",
@@ -676,7 +676,7 @@ func TestMapper_ProtoToShows(t *testing.T) {
 
 func TestProtoToSet(t *testing.T) {
 	s := structs.Set{
-		ID: 1,
+		ID:    1,
 		Label: "ENCORE 2",
 		Songs: []structs.SetSong{
 			{
@@ -717,8 +717,8 @@ func TestProtoToSet(t *testing.T) {
 		ret   structs.Set
 	}{
 		{
-			name:  "nil set",
-			ret:   structs.Set{},
+			name: "nil set",
+			ret:  structs.Set{},
 		},
 		{
 			name:  "success",
@@ -749,12 +749,12 @@ func TestProtoToSetSong(t *testing.T) {
 
 	p := &phishqlpb.SetSong{
 		Song: &phishqlpb.Song{
-			Id:                   int32(s.Song.ID),
-			Name:                 s.Song.Name,
+			Id:   int32(s.Song.ID),
+			Name: s.Song.Name,
 		},
 		Tag: &phishqlpb.Tag{
-			Id:                   int32(s.Tag.ID),
-			Text:                 s.Tag.Text,
+			Id:   int32(s.Tag.ID),
+			Text: s.Tag.Text,
 		},
 		Transition: s.Transition,
 	}
@@ -765,8 +765,8 @@ func TestProtoToSetSong(t *testing.T) {
 		ret   structs.SetSong
 	}{
 		{
-			name:  "nil set song",
-			ret:   structs.SetSong{},
+			name: "nil set song",
+			ret:  structs.SetSong{},
 		},
 		{
 			name:  "success",
@@ -831,19 +831,19 @@ func TestMapper_ProtoToTags(t *testing.T) {
 	}
 
 	tests := []struct {
-		name string
+		name  string
 		proto []*phishqlpb.Tag
-		ret  []structs.Tag
+		ret   []structs.Tag
 	}{
 		{
-			name: "nil tag",
+			name:  "nil tag",
 			proto: []*phishqlpb.Tag{nil},
-			ret:  []structs.Tag{},
+			ret:   []structs.Tag{},
 		},
 		{
-			name: "success",
+			name:  "success",
 			proto: []*phishqlpb.Tag{p},
-			ret:  []structs.Tag{tag},
+			ret:   []structs.Tag{tag},
 		},
 	}
 
@@ -875,7 +875,7 @@ func TestMapper_ProtoToTours(t *testing.T) {
 		ret   []structs.Tour
 	}{
 		{
-			name: "nil tour",
+			name:  "nil tour",
 			proto: []*phishqlpb.Tour{nil},
 			ret:   []structs.Tour{},
 		},
@@ -951,19 +951,19 @@ func TestMapper_ProtoToVenues(t *testing.T) {
 	}
 
 	tests := []struct {
-		name   string
+		name  string
 		proto []*phishqlpb.Venue
-		ret    []structs.Venue
+		ret   []structs.Venue
 	}{
 		{
-			name:   "nil venue",
+			name:  "nil venue",
 			proto: []*phishqlpb.Venue{nil},
-			ret:    []structs.Venue{{}},
+			ret:   []structs.Venue{{}},
 		},
 		{
-			name:   "success",
+			name:  "success",
 			proto: []*phishqlpb.Venue{p},
-			ret:    []structs.Venue{v},
+			ret:   []structs.Venue{v},
 		},
 	}
 
@@ -991,7 +991,7 @@ func TestMapper_GraphQLShowsToProto(t *testing.T) {
 
 	tests := []struct {
 		name string
-		args  map[string]interface{}
+		args map[string]interface{}
 		ret  *phishqlpb.GetShowsRequest
 		err  error
 	}{
@@ -1068,8 +1068,8 @@ func TestMakeCondition(t *testing.T) {
 		},
 		{
 			name: "condition not a map",
-			arg: 1,
-			err: errors.New("condition must be a map"),
+			arg:  1,
+			err:  errors.New("condition must be a map"),
 		},
 		{
 			name: "success",
@@ -1178,7 +1178,7 @@ func TestMakeConditions(t *testing.T) {
 		},
 		{
 			name: "makeCondition error",
-			arg: []interface{}{nil},
+			arg:  []interface{}{nil},
 			err:  errors.New("condition is nil"),
 		},
 		{
@@ -1258,14 +1258,14 @@ func TestMakeOrCondition(t *testing.T) {
 
 func TestMakeBaseCondition(t *testing.T) {
 	bc := &phishqlpb.BaseCondition{
-		Year: 2018,
-		Month: 10,
-		Day: 31,
+		Year:      2018,
+		Month:     10,
+		Day:       31,
 		DayOfWeek: 4,
-		City: "Las Vegas",
-		State: "NV",
-		Country: "USA",
-		Song: "Say It To Me S.A.N.T.O.S.",
+		City:      "Las Vegas",
+		State:     "NV",
+		Country:   "USA",
+		Song:      "Say It To Me S.A.N.T.O.S.",
 	}
 
 	tests := []struct {
@@ -1283,68 +1283,68 @@ func TestMakeBaseCondition(t *testing.T) {
 			arg: map[string]interface{}{
 				"year": "not an int",
 			},
-			err:  errors.New("year must be an int"),
+			err: errors.New("year must be an int"),
 		},
 		{
 			name: "month not an int",
 			arg: map[string]interface{}{
 				"month": "not an int",
 			},
-			err:  errors.New("month must be an int"),
+			err: errors.New("month must be an int"),
 		},
 		{
 			name: "day not an int",
 			arg: map[string]interface{}{
 				"day": "not an int",
 			},
-			err:  errors.New("day must be an int"),
+			err: errors.New("day must be an int"),
 		},
 		{
 			name: "dayOfWeek not an int",
 			arg: map[string]interface{}{
 				"dayOfWeek": "not an int",
 			},
-			err:  errors.New("dayOfWeek must be an int"),
+			err: errors.New("dayOfWeek must be an int"),
 		},
 		{
 			name: "city not a string",
 			arg: map[string]interface{}{
 				"city": 1,
 			},
-			err:  errors.New("city must be a string"),
+			err: errors.New("city must be a string"),
 		},
 		{
 			name: "state not a string",
 			arg: map[string]interface{}{
 				"state": 1,
 			},
-			err:  errors.New("state must be a string"),
+			err: errors.New("state must be a string"),
 		},
 		{
 			name: "country not a string",
 			arg: map[string]interface{}{
 				"country": 1,
 			},
-			err:  errors.New("country must be a string"),
+			err: errors.New("country must be a string"),
 		},
 		{
 			name: "song not a string",
 			arg: map[string]interface{}{
 				"song": 1,
 			},
-			err:  errors.New("song must be a string"),
+			err: errors.New("song must be a string"),
 		},
 		{
 			name: "success",
 			arg: map[string]interface{}{
-				"year": int(bc.Year),
-				"month": int(bc.Month),
-				"day": int(bc.Day),
+				"year":      int(bc.Year),
+				"month":     int(bc.Month),
+				"day":       int(bc.Day),
 				"dayOfWeek": int(bc.DayOfWeek),
-				"city": bc.City,
-				"state": bc.State,
-				"country": bc.Country,
-				"song": bc.Song,
+				"city":      bc.City,
+				"state":     bc.State,
+				"country":   bc.Country,
+				"song":      bc.Song,
 			},
 			ret: &phishqlpb.Condition{
 				Condition: &phishqlpb.Condition_Base{

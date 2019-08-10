@@ -9,12 +9,14 @@ import (
 	"github.com/jloom6/phishql/graphql/resolver"
 )
 
+// Params contains the parameters needed to construct the schema
 type Params struct {
 	Resolver resolver.Interface
 }
 
+// NewHandleFunc returns a handle func that executes the GraphQL query against the schema
 func NewHandleFunc(p Params) (func(w http.ResponseWriter, r *http.Request), error) {
-	s, err := New(p)
+	s, err := newSchema(p)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +39,7 @@ func NewHandleFunc(p Params) (func(w http.ResponseWriter, r *http.Request), erro
 	}, nil
 }
 
-func New(p Params) (graphql.Schema, error) {
+func newSchema(p Params) (graphql.Schema, error) {
 	return graphql.NewSchema(graphql.SchemaConfig{
 		Query: graphql.NewObject(
 			graphql.ObjectConfig{
