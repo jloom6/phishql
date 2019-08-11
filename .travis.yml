@@ -1,11 +1,12 @@
 language: go
 
 go:
-  - 1.8.x
+  - 1.12.x
   - tip
 
 before_install:
-  - go get -t -v ./...
+  - make bootstrap
+  - make mocks
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
