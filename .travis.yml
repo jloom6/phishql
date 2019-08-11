@@ -6,6 +6,7 @@ go:
 
 before_install:
   - make bootstrap
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - dep ensure
   - PROTOBUF_VERSION=3.3.0
   - PROTOC_FILENAME=protoc-${PROTOBUF_VERSION}-linux-x86_64.zip
