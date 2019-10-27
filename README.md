@@ -33,6 +33,8 @@ This assumes that [you get your ass handed to you everyday](https://www.youtube.
 make test
 ```
 
+Note: You may need to [install protoc](http://google.github.io/proto-lens/installing-protoc.html)
+
 ## Run like an antelope
 
 **Run everything in Docker**
